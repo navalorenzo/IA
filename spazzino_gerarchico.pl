@@ -20,7 +20,6 @@ raccoglitore_gerarchico_help :- maplist(write, [
 %  Agente "Spazzino". Pianificatore gerarchico
 %==============================================================
 
-
 type([in(point), deve_prendere(punto), deposito(punto), benzinaio(punto), serbatoio(integer), carico(integer), fine]:fluent).
 %   in(P):  l'agente si trova in P
 %   deve_prendere(X): l'agente deve prendere un oggetto in X
@@ -42,6 +41,11 @@ type([va(point,point), va_da_a(point,point), raccoglie, deposita, rifornimento]:
 %  mondo+agente
 %=================================================
 %
+
+pred(serbatoio(integer)).
+%  serbatoio(S) :- livello di benzina S
+:- dynamic(serbatoio/1).
+
 pred(in(point)).
 %  in(P) :  l'agente si trova in P
 :- dynamic(deve_prendere/1).
@@ -62,6 +66,9 @@ pred(current_world(any)).
 %  current_world(W):  W � il mondo in cui si trova l'agente
 :- dynamic(current_world/1).
 
+pred(cassonetto(point,integer)).
+%  MODO(++,--)semidet;
+%	 cassonetto(P, I) : il cassonetto si trova in P e contiene una quantità I di rifiuti
 
 %==================================================
 %  Implemento i predicati aperti di two_level_planner
@@ -74,22 +81,27 @@ two_level_planner:add_del(0, deposita, St, [fine], [deposito(P)], 0.5) :-
 	not(member(deve_prendere(_), St)),
 	member(deposito(P), St),
 	member(in(P), St).
+
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
 	not(member(deve_prendere(_), St)),
 	member(deposito(P2), St),
 	member(in(P1), St),
 	P1 \= P2,
 	get_action_plan(St, va_da_a(P1,P2), _Plan, Cost).
+
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
 	member(deve_prendere(P2),St),
 	member(in(P1), St),
 	P1 \= P2,
 	get_action_plan(St, va_da_a(P1,P2), _Plan, Cost).
+
 two_level_planner:add_del(0,raccoglie, St, [carico(Y)], [deve_prendere(P),carico(X)], 0.5) :-
 	member(deve_prendere(P), St),
 	member(in(P), St),
 	member(carico(X), St),
-	Y is X + 1.
+	cassonetto(P, Q),
+	Y is X + Q.
+
 two_level_planner:add_del(0,rifornimento, St, [serbatoio(Y)], [serbatoio(X)], 0.5) :-
 	member(serbatoio(X), St),
 	member(in(P), St),
@@ -99,13 +111,15 @@ two_level_planner:add_del(0,rifornimento, St, [serbatoio(Y)], [serbatoio(X)], 0.
 %=====================================
 %    AZIONI DI LIVELLO 1
 %=====================================
-two_level_planner:add_del(1,va(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
+two_level_planner:add_del(1,va(P1,P2), St, [in(P2),serbatoio(N_S)], [in(P1), serbatoio(S)], Cost) :-
 	member(in(P1), St),
 	step(Dir,P1,P2), % P2 raggiungibile in un passo in una direzione Dir
 	current_world(W),
 	not(content(W,P2,ostacolo)),
-	length_step(Dir,Cost).  %distanza nella direzione di spostamento
-
+	length_step(Dir,Cost),  %distanza nella direzione di spostamento
+	member(serbatoio(S), St),
+	N_S is S - 1,
+	step(['quantità benzina ', S]).
 
 %=====================================
 %    EURISTICA DI LIVELLO 0
@@ -134,7 +148,7 @@ two_level_planner:h(1, St, H) :-
 %=======================================
 %
 two_level_planner:starting_state([P1, PuntiRaccolta, P2, P3],
-		                 [in(P1), deposito(P2), benzinaio(P3), carico(0), benzina(25) | FluentiRaccolta]) :-
+		                 [in(P1), deposito(P2), benzinaio(P3), carico(0), serbatoio(25) | FluentiRaccolta]) :-
 	setof(deve_prendere(X), member(X, PuntiRaccolta), FluentiRaccolta).
 	%  [in(P1), deposito(P2), benzinaio(P3) | FluentiRaccolta] sono i fluenti veri nello stato iniziale
 
@@ -145,7 +159,7 @@ two_level_planner:goal_state(_Param, G) :-
 %   PREDICATI DI START E  GOAL LIVELLO 1
 %=======================================
 
-two_level_planner:action_starting_state(_St, va_da_a(P1,P2), [in(P1), target(P2)]).
+two_level_planner:action_starting_state(_St, va_da_a(P1,P2), [in(P1), target(P2), serbatoio(25)]).
 %  negli stati per pianificare va_da_a(P1,P2) mi bastano in(P) e il
 %  target(P2)
 
@@ -164,17 +178,32 @@ two_level_planner:macro_azione(va_da_a(_,_)).
 two_level_planner:esegui_azione_base(va(P1,P2)) :-
 	retract(in(P1)),
 	assert(in(P2)),
+	serbatoio(S),
+	N_S is S - 1,
+	retract(serbatoio(S)),
+	assert(serbatoio(N_S)),
 	simula(va(P1,P2)).
+
 two_level_planner:esegui_azione_base(deposita) :-
 	simula(deposita).
+
 two_level_planner:esegui_azione_base(rifornimento) :-
 	in(P3),
 	simula(rifornimento).
+
 two_level_planner:esegui_azione_base(raccoglie) :-
 	in(P),
 	retract(deve_prendere(P)),
+	carico(C),
+	cassonetto(P,X),
+	N_C is C + X,
+	retract(carico(C)),
+	assert(carico(N_C)),
+	retract(cassonetto(P, X)),
+	assert(cassonetto(P, 0)),
 	simula(raccogli(P)).
-two_level_planner:action_starting_state(va_da_a(P1,P2), [in(P1), target(P2)]).
+
+two_level_planner:action_starting_state(va_da_a(P1,P2), [in(P1), target(P2),serbatoio(1000)]).
 %  trovo lo stato strips di inizio azione in esecuzione nel mondo
 %  necessario per ottenere il piano di esecuzione per quello stato
 
@@ -184,7 +213,12 @@ two_level_planner:action_starting_state(va_da_a(P1,P2), [in(P1), target(P2)]).
 %  USA get_plan e ottiene un piano di livello 0 e memorizza
 %  i piani di esecuzione (livello 1) delle macro-azioni
 %===================================================
+pred(inizializza_cassonetto(point)).
+%	 inizializza_cassonetto(P) assegna a un cassonetto nel punto P una quantità di rifiuti random
 
+inizializza_cassonetto(P) :-
+	random_between(1,5,R),
+	assert(cassonetto(P,R)).
 
 pred(raccolta(atom, point, list(point), point, point, list(action), number)).
 %  raccolta(W, P, Raccolta, Q, B, Plan, Cost) : il mondo W � stato
@@ -195,13 +229,14 @@ pred(raccolta(atom, point, list(point), point, point, list(action), number)).
 %
 raccolta(W, Pos, Racc, B, Q) :-
 	% preparo lo stato iniziale del mondo+agente
-	maplist(retractall, [in(_), deposito(_), deve_prendere(_), benzinaio(_), serbatoio(_), carico(_)]),
+	maplist(retractall, [in(_), deposito(_), deve_prendere(_), benzinaio(_), serbatoio(_), carico(_), cassonetto(_,_)]),
 	assert(in(Pos)),
 	assert(deposito(Q)),
 	assert(benzinaio(B)),
 	assert(serbatoio(25)),
 	assert(carico(0)),
 	forall(member(P,Racc), assert(deve_prendere(P))),
+	forall(member(P,Racc), inizializza_cassonetto(P)),
 
 	%  disegno il mondo e il suo stato
 	set_current_world(W),
@@ -260,15 +295,21 @@ simula(va(P1,P2)) :- !,
 	current_world(W),
 	move_fig(W,circ(_,_),P1,P2),
 	step([]).
+
 simula(raccogli(P)) :-
 	current_world(W),
 	del_fig(W, box(_,_), P),
-	step(['Raccolto oggetto']).
+	carico(C),
+	serbatoio(S),
+	step(['Raccolti rifiuti, carico ', C]),
+	step(['\nLivello benzina ', S]).
+
 simula(deposita) :-
 	in(P),
 	step(['Depositati gli oggetti in ',P]),
 	current_world(W),
 	destroy(W).
+
 simula(rifornimento(P)) :-
 	current_world(W),
 	step(['Rifornimento eseguito']).
