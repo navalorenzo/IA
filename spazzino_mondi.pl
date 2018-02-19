@@ -261,6 +261,7 @@ pred(represents(any, char, content)).
 represents(_,'O', ostacolo).
 represents(cw(_),'A', agente).
 represents(cw(_),'G', goal).
+represents(cw(_), 'g', grey).
 
 % aggiunta degli elementi del mondo
 represents(cw(_),'B', benzinaio).
@@ -275,15 +276,15 @@ represents(delivery(_), b, c1).
 
 char_world(cw(1),[
 'OOOOOOOOOOOOOOOOOOOO',
-'O                  O',
-'O   OOOOO    OO    O',
-'O   OOOOO    OO    O',
-'O   OOOOO    OO    O',
-'O                  O',
-'O                  O',
-'O     OOOOOOOO	    O',
-'O     OOOOOOOO     O',
-'O                  O',
+'Og g g g g g g g g O',
+'O g OOOOO g g OOg gO',
+'Og gOOOOOg g gOO g O',
+'O g OOOOO g g OOg gO',
+'Og g g g g g g g g O',
+'O g g g g g g g g gO',
+'Og g gOOOOOOOO	g g O',
+'O g g OOOOOOOOg g gO',
+'Og g g g g g g g g O',
 'OOOOOOOOOOOOOOOOOOOO']).
 
 
@@ -367,6 +368,7 @@ open_pred(fig_of(any,content,fig, number)).
 % grafica degli elementi aggiunti
 fig_of(_,benzinaio,box(Size,[col(orange)]),Size).
 fig_of(_,discarica,box(Size,[col(brown)]),Size).
+fig_of(_,grey,box(Size,[col(grey)]),Size).
 
 fig_of(_,ostacolo,box(Size,[col(black)]),Size).
 fig_of(_,agente,circ(CircSize,[col(green)]), S) :-

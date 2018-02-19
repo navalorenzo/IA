@@ -11,7 +11,7 @@ raccoglitore_gerarchico_help :- maplist(write, [
 '\n***********************************************************',
 '\nRaccoglitore gerarchico,  provare:\n',
 '\n?- load_world(cw(1)).',
-'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)],point(3,3),point(3,2),15).',  %15 livello di benzina
+'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)],point(3,3),point(3,2),15,1).',  %15 capienza serbatoio, 1 capienza camion
 '\n?- action_plan(Stato, Azione, Piano, Costo).',
 '\n***********************************************************\n']).
 :- raccoglitore_gerarchico_help.
@@ -46,7 +46,8 @@ pred(serbatoio(integer)).
 %  serbatoio(S) :- livello di benzina S
 :- dynamic(serbatoio/1).
 
-pred(capienza(integer)).
+pred(capienza_serbatoio(integer)).
+pred(capienza_camion(integer)).
 
 
 pred(in(point)).
@@ -113,7 +114,8 @@ two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1),
 		get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
 		member(serbatoio(X), St),
 		C is round(Cost),
-		Y is X - C.
+		Y is X - C,
+		Y @>= 0.
 
 
 two_level_planner:add_del(0,raccoglie, St, [carico(Y)], [deve_prendere(P),carico(X)], 0.5) :-
@@ -204,13 +206,17 @@ two_level_planner:esegui_azione_base(va(P1,P2)) :-
 	simula(va(P1,P2)).
 
 two_level_planner:esegui_azione_base(deposita) :-
+	retract(carico(C)),
+	assert(carico(0)),
 	simula(deposita).
 
 two_level_planner:esegui_azione_base(rifornimento) :-
 	benzinaio(P3),
 	in(P3),
+	serbatoio(Se),
+	step(['Serbatoio: ' , Se]),
 	retract(serbatoio(S)),
-	capienza(C),
+	capienza_serbatoio(C),
 	assert(serbatoio(C)),
 	simula(rifornimento).
 
@@ -244,16 +250,17 @@ inizializza_cassonetto(P) :-
 	random_between(1,5,R),
 	assert(cassonetto(P,R)).
 
-pred(raccolta(atom, point, list(point), point, point, integer, list(action), number)).
+pred(raccolta(atom, point, list(point), point, point, integer, integer, list(action), number)).
 %  raccolta(W, P, Raccolta, Q, B, Plan, Cost) : il mondo W � stato
 %  caricato, l'agente si trova inzialmente in P, deve passare per i
 %  punti Raccolta e depositare in Q. Può fare rifornimento in B Plan � il piano di raccolta con
 %  costo Cost.
 %  MODO (+,+,+,+,+) semidet, FALLISCE se W non � caricato
 %
-raccolta(W, Pos, Racc, B, Q, C) :-
+raccolta(W, Pos, Racc, B, Q, C, A) :-
 	% preparo lo stato iniziale del mondo+agente
-	maplist(retractall, [in(_), deposito(_), deve_prendere(_), benzinaio(_), serbatoio(_), carico(_), cassonetto(_,_), capineza()]),
+	maplist(retractall, [in(_), deposito(_), deve_prendere(_), benzinaio(_), serbatoio(_), carico(_),
+	 							cassonetto(_,_), capineza_camion(),capienza_serbatoio()]),
 	assert(in(Pos)),
 	assert(deposito(Q)),
 	assert(benzinaio(B)),
@@ -261,7 +268,8 @@ raccolta(W, Pos, Racc, B, Q, C) :-
 	assert(carico(0)),
 	forall(member(P,Racc), assert(deve_prendere(P))),
 	forall(member(P,Racc), inizializza_cassonetto(P)),
-	assert(capienza(C)),
+	assert(capienza_serbatoio(C)),
+	assert(capienza_camion(A)),
 
 	%  disegno il mondo e il suo stato
 	set_current_world(W),
@@ -293,9 +301,9 @@ draw_world_state(W) :-
 	draw_fig(W, circ(15,[col(green)]), Pos),
 	forall(deve_prendere(PR), draw_fig(W, box(15,[col(blue)]), PR)),
 	deposito(Q),
-        draw_fig(W, circ(15,[col(orange)]), Q),
+        draw_fig(W, box(15,[col(orange)]), Q),
 	benzinaio(B),
-		draw_fig(W, circ(15,[col(brown)]), B).
+		draw_fig(W, box(15,[col(brown)]), B).
 
 
 
