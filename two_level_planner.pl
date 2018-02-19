@@ -23,7 +23,7 @@ two_level_planner_help :-
 '\nesegui(+Plan) : esegue il piano a due livelli Plan',
 '\n\nPredicati aperti per la pianificazione:',
 '\n  add_del(+Livello, +Azione, +StripsState, --Add, --Del, --Cost)',
-'\n  h(+Livello, +StripsState, --H), dove H è il valore euristico di StripsState',
+'\n  h(+Livello, +StripsState, --H), dove H ï¿½ il valore euristico di StripsState',
 '\n  starting_state(+Paremeters, --StripsState), stati iniziali di livello 0',
 '\n  goal_state(+Paremeters, --StripsState), stati goal di livello 0',
 '\n  action_starting_state(+St0, +Act, --St1): St1 strips_state iniziale di livello 1',
@@ -31,8 +31,8 @@ two_level_planner_help :-
 '\n  action_final_state(+St0, +Act, +G): G e'' uno strips_state finale di livello 1',
 '\n    nell''esecuzione della macro-azione Act con stato iniziale St0 di livello 0',
 '\n\nPredicati aperti per esegui:',
-'\n  macro_azione(+Act) : Act è una macro-azione di livello 0',
-'\n  action_starting_state(+Act, -St1) : St1 è lo strips_state iniziale di Act',
+'\n  macro_azione(+Act) : Act ï¿½ una macro-azione di livello 0',
+'\n  action_starting_state(+Act, -St1) : St1 ï¿½ lo strips_state iniziale di Act',
 '\n    che rappresenta lo stato attuale di mondo+agente',
 '\n  esegui_azione_base(+A, +S1, -S2) : esecuzione di A nello stato interno S1',
 '\n     con transizione a S2'
@@ -58,21 +58,21 @@ open_pred(h(integer, strips_state, number)).
 %  h(K, St, H) : H = valore euristico per lo stato St di livello K
 %
 open_pred(starting_state(list(any), strips_state)).
-%  starting_state(Paremeters, St) :  St è lo strips_state iniziale
+%  starting_state(Paremeters, St) :  St ï¿½ lo strips_state iniziale
 %  per il piano di livello 0
 %  MODO  (++,--) nondet
 %
 open_pred(goal_state(list(any), strips_state)).
-%  goal_state(Parameters, St):  St è uno stato goal per il livello 0
+%  goal_state(Parameters, St):  St ï¿½ uno stato goal per il livello 0
 %  MODO (++,+) semidet
 %
 open_pred(action_starting_state(strips_state, action, strips_state)).
-%  action_starting_state(St, Act, St1) : St1 è lo strips_state iniziale
+%  action_starting_state(St, Act, St1) : St1 ï¿½ lo strips_state iniziale
 %  per il piano di livello 1 che esegue Act a partire da St
 %  MODO (++,++,--) nondet
 %
 open_pred(action_final_state(strips_state, action, strips_state)).
-%  action_final_state(Parameters, St, G): G è uno stato goal per il
+%  action_final_state(Parameters, St, G): G ï¿½ uno stato goal per il
 %  piano di livello 1 che esegue Act a partire da St
 %  MODO (++,++,+) semidet
 
@@ -81,14 +81,14 @@ pred(get_plan(list(any), list(action), number)).
 %   l'obiettivo descritto in Input, con costo Cost
 %
 pred(get_action_plan(strips_state, action, list(action), number)).
-%   get_action_plan(St, Act, Plan, Cost) : Plan è un piano che esegue
+%   get_action_plan(St, Act, Plan, Cost) : Plan ï¿½ un piano che esegue
 %   la macro-azione Act partendo dallo strips_state St
 %
 local_pred(action_plan(strips_state, action, list(action), number)).
-% action_plan(St, Act, Plan, Cost) : Plan è un piano di esecuzione
+% action_plan(St, Act, Plan, Cost) : Plan ï¿½ un piano di esecuzione
 % della macro-azione Act a partire dallo stato St
 :- dynamic(action_plan/4).
-%  memorizza i piani di esecuzione delle macro-azioni già ottenuti
+%  memorizza i piani di esecuzione delle macro-azioni giï¿½ ottenuti
 
 % uso level per gestire i livelli
 :- dynamic(level/1).
@@ -117,11 +117,11 @@ get_plan(ParameterList, Plan, Cost) :-
 
 %============================================================
 %  Livello 1: cerco un piano di esecuzione di una macro-azione, a meno
-%  che non l'abbia già calcolato
+%  che non l'abbia giï¿½ calcolato
 %  ===============================================================
 get_action_plan(St, Action, Plan, Cost) :-
 	action_plan(St, Action, Plan, Cost),!.
-	%  piano già calcolato
+	%  piano giï¿½ calcolato
 get_action_plan(St, Action, Plan, Cost) :-
 	set_level(1),
 	% entro in livello 1
@@ -146,15 +146,15 @@ pred(esegui(list(action))).
 local_pred(esegui_azione(action, stato_interno, stato_interno)).
 % esegui(A, S1,S2) : l'agente esegue A e passa da stato_interno S1
 % a stato_interno S2
-% Se A è macro, l'esecuzione avviene recuperando il piano per
+% Se A ï¿½ macro, l'esecuzione avviene recuperando il piano per
 % A.   MODO (+,+,-) det
 %
 open_pred(macro_azione(action)).
-%  macro_azione(Act) : Act è una macro-azione
+%  macro_azione(Act) : Act ï¿½ una macro-azione
 %  MODO (+) semidet
 %
 open_pred(action_starting_state(action, strips_state)).
-%  action_starting_state(Act, St1) : St1 è lo strips_state iniziale
+%  action_starting_state(Act, St1) : St1 ï¿½ lo strips_state iniziale
 %  per il calcolo del piano di livello 1 che esegue Act a partire dallo
 %  stato corrente del mondo+agente
 %  MODO (++,--) nondet
@@ -178,11 +178,11 @@ esegui([A|Piano]) :-
 
 esegui_azione(A) :-
 	macro_azione(A),!,
-	% se A è macro, calcolo il piano di esecuzione di A
+	% se A ï¿½ macro, calcolo il piano di esecuzione di A
 	% a partire dallo stato attuale e lo eseguo
 	action_starting_state(A, St0),
 	get_action_plan(St0,A,PianoAzione,_),
 	esegui(PianoAzione).
 esegui_azione(A) :-
-	%  se A non è macro, è un'azione base direttamente eseguibile
+	%  se A non ï¿½ macro, ï¿½ un'azione base direttamente eseguibile
 	esegui_azione_base(A).
