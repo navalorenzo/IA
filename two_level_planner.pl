@@ -120,7 +120,10 @@ get_plan(ParameterList, Plan, Cost) :-
 %  che non l'abbia gi� calcolato
 %  ===============================================================
 get_action_plan(St, Action, Plan, Cost) :-
-	action_plan(St, Action, Plan, Cost),!.
+	%action_starting_state(St1, Action),
+	%step(['Stato lv0: ', St, 'Stato lv1: ', St1]),
+	% con St1 al posto di St calcola i piano molto più velocemente ma non controlla la benzina
+	action_plan(St1, Action, Plan, Cost),!.
 	%  piano gi� calcolato
 get_action_plan(St, Action, Plan, Cost) :-
 	set_level(1),

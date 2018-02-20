@@ -104,7 +104,7 @@ two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1),
 		member(deposito(P2), St),
 		member(in(P1), St),
 		P1 \= P2,
-		get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+		get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
 		%controllo serbatoio
 		member(serbatoio(X), St),
 		C is round(Cost),
@@ -123,7 +123,7 @@ two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1),
 		member(deve_prendere(P2),St),
 		member(in(P1), St),
 		P1 \= P2,
-		get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+		get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
 		%controllo serbatoio
 		member(serbatoio(X), St),
 		C is round(Cost),
@@ -136,7 +136,7 @@ two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1),
 		member(in(P1), St),
 		member(benzinaio(P2), St),
 		P1 \= P2,
-		get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+		get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
 		% controllo serbatoio
 		member(serbatoio(X), St),
 		C is round(Cost),
@@ -148,7 +148,7 @@ two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1),
 			member(deposito(P2),St),
 			member(in(P1), St),
 			P1 \= P2,
-			get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+			get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
 			%controllo serbatoio
 			member(serbatoio(X), St),
 			C is round(Cost),
@@ -163,11 +163,11 @@ two_level_planner:add_del(0,raccoglie, St, [carico(Y)], [deve_prendere(P),carico
 	cassonetto(P, Q),
 	Y is X + Q.
 
-two_level_planner:add_del(0,rifornimento, St, [serbatoio(Y)], [serbatoio(X)], 0.5) :-
+two_level_planner:add_del(0,rifornimento, St, [serbatoio(C)], [serbatoio(X)], 0.5) :-
 	member(serbatoio(X), St),
 	member(in(P), St),
 	member(benzinaio(P), St),
-	Y is 25.
+	capienza_serbatoio(C).
 
 %=====================================
 %    AZIONI DI LIVELLO 1
@@ -183,16 +183,28 @@ two_level_planner:add_del(1,va(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
 %    EURISTICA DI LIVELLO 0
 %=====================================
 
+pred(somma(list(any), point, integer)).
+%modo (++,++,--)det
+somma([], P, 0).
+somma([H],P,  D ) :- distance(diagonal, H, P, D).
+somma([H|T], P , D) :- somma(T, H, Ds ), distance(diagonal, H, P, Dp), D is Ds + Dp.
+
+
+
+
 two_level_planner:h(0, St, 0) :-
 	member(fine,St), !.
 two_level_planner:h(0, St, H) :-
 	%  conto il numero di oggetti da raccogliere;
-	%  euristica da migliorare, cos� se gli oggetti da
+	%  euristica da migliorare, cosi se gli oggetti da
 	%  raccogliere sono distanti si ha out of stack
-	setof(X, member(deve_prendere(X), St), Pos) ->
-	    length(Pos,H)
-	;   H = 0.
-
+		setof(X, member(deve_prendere(X), St), Pos) ->
+			member(in(P1), St),
+	    somma(Pos, P1, H);
+			H = 0.
+%  A -> B ; C è if(A) then B, else C
+% usa ds_on per guardare il branching factor, l'ultimo branching factor
+% dovrebbe essere circ < 1,5 ora siamo a 2,3
 %=====================================
 %    EURISTICA DI LIVELLO 1
 %=====================================
@@ -261,6 +273,7 @@ two_level_planner:esegui_azione_base(rifornimento) :-
 	step(['Serbatoio: ' , Se]),
 	retract(serbatoio(S)),
 	capienza_serbatoio(C),
+	step(['Capienza; ', C]),
 	assert(serbatoio(C)),
 	simula(rifornimento).
 
