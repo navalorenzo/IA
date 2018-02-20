@@ -172,7 +172,7 @@ two_level_planner:add_del(0,rifornimento, St, [serbatoio(Y)], [serbatoio(X)], 0.
 %=====================================
 %    AZIONI DI LIVELLO 1
 %=====================================
-two_level_planner:add_del(1,va(P1,P2), St, [in(P2),serbatoio(N_S)], [in(P1), serbatoio(S)], Cost) :-
+two_level_planner:add_del(1,va(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
 	member(in(P1), St),
 	step(Dir,P1,P2), % P2 raggiungibile in un passo in una direzione Dir
 	current_world(W),
@@ -217,7 +217,7 @@ two_level_planner:goal_state(_Param, G) :-
 %   PREDICATI DI START E  GOAL LIVELLO 1
 %=======================================
 
-two_level_planner:action_starting_state(_St, va_da_a(P1,P2), [in(P1), target(P2), serbatoio(X), benzinaio(P3)]) :- serbatoio(X) , benzinaio(P3).
+two_level_planner:action_starting_state(_St, va_da_a(P1,P2), [in(P1), target(P2)]).
 % è usato durante la fase di PIANIFICAZIONE
 %  negli stati per pianificare va_da_a(P1,P2) mi bastano in(P) e il
 %  target(P2)
