@@ -29,12 +29,13 @@ type([in(point), deve_prendere(punto), deposito(punto), benzinaio(punto), serbat
 %   carico(C): quantità C di rifiuti già raccolti
 %   fine:  ha finito
 
-type([va(point,point), va_da_a(point,point), raccoglie, deposita, rifornimento]:azione).
+type([va(point,point), va_da_a(point,point), raccoglie, deposita, rifornimento, scarica]:azione).
 %  va(P1,P2) : avanza da P1 a P2 adiacente
 %  va_da_a(P1,P2) : va da P1 a P2 non adiacente, macro-azione
 %  raccoglie:  raccoglie l'oggetto
-%  deposita: deposita gli oggetti
+%  deposita: deposita gli oggetti e termina
 %  rifornimento: fa il pieno all'agente
+%	 scarica: scarica i rifiuti
 
 %================================================
 %  Predicati dinamici che rappresentano lo stato di
@@ -86,36 +87,73 @@ two_level_planner:add_del(0, deposita, St, [fine], [deposito(P)], 0.5) :-
 	member(deposito(P), St),
 	member(in(P), St).
 
-two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
-	not(member(deve_prendere(_), St)),
-	member(deposito(P2), St),
-	member(in(P1), St),
-	P1 \= P2,
-	get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
-	member(serbatoio(X), St),
-	C is round(Cost),
-	C @< X,
-	Y is X - C.
+two_level_planner:add_del(0, scarica, St, [carico(0)], [carico(C)], 0.5) :-
+		member(deve_prendere(_), St),
+		member(deposito(P), St),
+		member(in(P), St),
+		member(carico(C), St).
 
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
-	member(deve_prendere(P2),St),
-	member(in(P1), St),
-	P1 \= P2,
-	get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
-	member(serbatoio(X), St),
-	C is round(Cost),
-	C @< X,
-	Y is X - C.
+		%controllo carico
+		member(carico(Ca), St),
+		capienza_camion(Cap),
+		K is Cap - 5,
+		Ca @=<  K,
+		%piano
+		not(member(deve_prendere(_), St)),
+		member(deposito(P2), St),
+		member(in(P1), St),
+		P1 \= P2,
+		get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+		%controllo serbatoio
+		member(serbatoio(X), St),
+		C is round(Cost),
+		C @< X,
+		Y is X - C.
+
+
 
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
+		%controllo capienza
+		member(carico(Ca), St),
+		capienza_camion(Cap),
+		K is Cap - 5,
+		Ca @=< K,
+		%piano
+		member(deve_prendere(P2),St),
+		member(in(P1), St),
+		P1 \= P2,
+		get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+		%controllo serbatoio
+		member(serbatoio(X), St),
+		C is round(Cost),
+		C @< X,
+		Y is X - C.
+
+%benzinaio
+two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
+		%piano
 		member(in(P1), St),
 		member(benzinaio(P2), St),
 		P1 \= P2,
 		get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+		% controllo serbatoio
 		member(serbatoio(X), St),
 		C is round(Cost),
 		Y is X - C,
 		Y @>= 0.
+
+%svuota carico
+two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
+			member(deposito(P2),St),
+			member(in(P1), St),
+			P1 \= P2,
+			get_action_plan(St, va_da_a(P1,P2), _Plan, Cost),
+			%controllo serbatoio
+			member(serbatoio(X), St),
+			C is round(Cost),
+			C @< X,
+			Y is X - C.
 
 
 two_level_planner:add_del(0,raccoglie, St, [carico(Y)], [deve_prendere(P),carico(X)], 0.5) :-
@@ -210,6 +248,12 @@ two_level_planner:esegui_azione_base(deposita) :-
 	assert(carico(0)),
 	simula(deposita).
 
+
+two_level_planner:esegui_azione_base(scarica) :-
+		retract(carico(C)),
+		assert(carico(0)),
+		simula(scarica).
+
 two_level_planner:esegui_azione_base(rifornimento) :-
 	benzinaio(P3),
 	in(P3),
@@ -260,7 +304,7 @@ pred(raccolta(atom, point, list(point), point, point, integer, integer, list(act
 raccolta(W, Pos, Racc, B, Q, C, A) :-
 	% preparo lo stato iniziale del mondo+agente
 	maplist(retractall, [in(_), deposito(_), deve_prendere(_), benzinaio(_), serbatoio(_), carico(_),
-	 							cassonetto(_,_), capineza_camion(),capienza_serbatoio()]),
+	 							cassonetto(_,_), capienza_camion(_),capienza_serbatoio(_)]),
 	assert(in(Pos)),
 	assert(deposito(Q)),
 	assert(benzinaio(B)),
@@ -270,6 +314,7 @@ raccolta(W, Pos, Racc, B, Q, C, A) :-
 	forall(member(P,Racc), inizializza_cassonetto(P)),
 	assert(capienza_serbatoio(C)),
 	assert(capienza_camion(A)),
+	step(['Capienza ' , A]),
 
 	%  disegno il mondo e il suo stato
 	set_current_world(W),
@@ -342,6 +387,11 @@ simula(deposita) :-
 	step(['Depositati gli oggetti in ',P]),
 	current_world(W),
 	destroy(W).
+
+simula(scarica) :-
+		current_world(W),
+		step(['Scarico oggetti']).
+
 
 simula(rifornimento) :-
 	current_world(W),
