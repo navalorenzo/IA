@@ -12,7 +12,7 @@ raccoglitore_gerarchico_help :- maplist(write, [
 '\nRaccoglitore gerarchico,  provare:\n',
 '\n?- load_world(cw(1)).',
 '\n  raccolta(mondo, punto di partenza, lista di cassonetti, punto di alta densita, punto di bassa densita, benzinaio, deposito, capienza serbatoio, capienza camion)',
-'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)]point(2,2), point(8,8),point(3,3),point(3,2),35,15).',
+'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)],point(2,2), point(8,8),point(3,3),point(3,2),35,15).',
 '\n?- action_plan(Stato, Azione, Piano, Costo).',
 '\n***********************************************************\n']).
 :- raccoglitore_gerarchico_help.
