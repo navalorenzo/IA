@@ -11,7 +11,7 @@ raccoglitore_gerarchico_help :- maplist(write, [
 '\n***********************************************************',
 '\nRaccoglitore gerarchico,  provare:\n',
 '\n?- load_world(cw(1)).',
-'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)],point(3,3),point(3,2),15,1).',  %15 capienza serbatoio, 1 capienza camion
+'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)],point(3,3),point(3,2),15,5).',  %15 capienza serbatoio, 1 capienza camion
 '\n?- action_plan(Stato, Azione, Piano, Costo).',
 '\n***********************************************************\n']).
 :- raccoglitore_gerarchico_help.
@@ -49,7 +49,6 @@ pred(serbatoio(integer)).
 
 pred(capienza_serbatoio(integer)).
 pred(capienza_camion(integer)).
-
 
 pred(in(point)).
 %  in(P) :  l'agente si trova in P
@@ -110,8 +109,6 @@ two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1),
 		C is round(Cost),
 		C @< X,
 		Y is X - C.
-
-
 
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
 		%controllo capienza
@@ -183,28 +180,25 @@ two_level_planner:add_del(1,va(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
 %    EURISTICA DI LIVELLO 0
 %=====================================
 
-pred(somma(list(any), point, integer)).
-%modo (++,++,--)det
-somma([], P, 0).
-somma([H],P,  D ) :- distance(diagonal, H, P, D).
-somma([H|T], P , D) :- somma(T, H, Ds ), distance(diagonal, H, P, Dp), D is Ds + Dp.
-
-
-
+pred(distanza(list(any), point, integer)).
+% distanza(L, P, I) : I =somma delle distanze tra P e i punti della lista L
+% Modo(++,++,--)det
+distanza([], P, 0).
+distanza([H], P, I):- distance(diagonal,H,P,I).
+distanza([H|T], P, I):- distanza(T, P, It), distance(diagonal,H,P,Ih), I is It + Ih.
 
 two_level_planner:h(0, St, 0) :-
 	member(fine,St), !.
 two_level_planner:h(0, St, H) :-
-	%  conto il numero di oggetti da raccogliere;
-	%  euristica da migliorare, cosi se gli oggetti da
-	%  raccogliere sono distanti si ha out of stack
-		setof(X, member(deve_prendere(X), St), Pos) ->
-			member(in(P1), St),
-	    somma(Pos, P1, H);
-			H = 0.
-%  A -> B ; C è if(A) then B, else C
-% usa ds_on per guardare il branching factor, l'ultimo branching factor
-% dovrebbe essere circ < 1,5 ora siamo a 2,3
+	%  L'euristica viene calcolata stimando la somma delle distanze di andata e ritorno
+	%  tra ogni cassonetto e il deposito
+	setof(X, member(deve_prendere(X), St), Pos) ->
+		length(Pos, NumCassonetti),
+		deposito(D),
+		distanza(Pos,D, V),
+		H is  V * 2 ;
+		H = 0.
+
 %=====================================
 %    EURISTICA DI LIVELLO 1
 %=====================================
