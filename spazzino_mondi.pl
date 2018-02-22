@@ -261,11 +261,6 @@ pred(represents(any, char, content)).
 represents(_,'O', ostacolo).
 represents(cw(_),'A', agente).
 represents(cw(_),'G', goal).
-represents(cw(_), 'g', grey).
-
-% aggiunta degli elementi del mondo
-represents(cw(_),'B', benzinaio).
-represents(cw(_),'D', discarica).
 
 represents(delivery(_), *, waypoint).
 represents(delivery(_), K, p(NK)):-
@@ -276,16 +271,16 @@ represents(delivery(_), b, c1).
 
 char_world(cw(1),[
 'OOOOOOOOOOOOOOOOOOOO',
-'Og g g g g g g g g O',
-'O g OOOOO g g OOg gO',
-'Og gOOOOOg g gOO g O',
-'O g OOOOO g g OOg gO',
-'Og g g g g g g g g O',
-'O g g g g g g g g gO',
-'Og g gOOOOOOOO	g g O',
-'O g g OOOOOOOOg g gO',
-'Og g g g g g g g g O',
+'O                  O',
+'O   OOOOO    OO    O',
+'O   OOOOO    OO    O',
+'O   OOOOO    OO    O',
+'O                  O',
+'O     OOOOOOOO     O',
+'O     OOOOOOOO     O',
+'O                  O',
 'OOOOOOOOOOOOOOOOOOOO']).
+
 
 
 char_world(cw(2),[

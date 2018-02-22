@@ -27,7 +27,7 @@ import_type(draw_world, [point/0, filling/0, fig/0]).
 %   Rappresentazione di mondi quadrettati, in cui i punti
 %   sono quadretti che sono vuoti o contengono ostacoli
 %   o altri tipi di terreno/oggetti
-%   Un mondo di nome W è rappresentato dai predicati
+%   Un mondo di nome W ï¿½ rappresentato dai predicati
 %   a)  world(W, NCol, NRow)  che ne indica le dimensioni
 %   b)  content(W, P, C)  che indica il contenuto C di un
 %   punto (quadretto) P
@@ -67,7 +67,7 @@ type([{predefined_conteny},{user_content}]:content).
 
 pred(world(any, integer, integer)).
 %  world(W, NCol, NRow) :
-%  W è un mondo caricato in memoria dinamica con NCol colonne
+%  W ï¿½ un mondo caricato in memoria dinamica con NCol colonne
 %  (larghezza) e NRow righe (altezza)
 %  MODO  (?,?,?) nondet
 %  NOTA: non si fissa un tipo per i nomi dei mondi, si usa
@@ -80,7 +80,7 @@ pred(content(any, point, content)).
 :-  dynamic(content/3).
 
 pred(navigable(any,point)).
-%  navigable(W, P) :  P punto in cui l'agente può passare
+%  navigable(W, P) :  P punto in cui l'agente puï¿½ passare
 %  MODO  (+,+) semidet
 %
 open_pred(navigable_content(content)).
@@ -104,11 +104,11 @@ pred(gen_world(any, integer, integer)).
 
 pred(load_world(any)).
 %  load_world(Name) :  carica il mondo Name definito da una mappa
-%  di caratteri  (vedi più avanti) o memorizzato nel "repository"
-%  Modo  (+) semidet  (fallisce se non c'è una mappa con quel nome)
+%  di caratteri  (vedi piï¿½ avanti) o memorizzato nel "repository"
+%  Modo  (+) semidet  (fallisce se non c'ï¿½ una mappa con quel nome)
 %
 pred(existing_world(any)).
-%  existing_world(Name) :  Name è definito da una mappa
+%  existing_world(Name) :  Name ï¿½ definito da una mappa
 %  di caratteri  o memorizzato nel "repository"
 %  MODO  (?) nondet
 
@@ -135,7 +135,7 @@ pred(draw_loaded_world(any,number)).
 %  draw_loaded_world(W,Size) : disegna il mondo W on quadrettatura di
 %  dimensione Size
 %  MODO (++,++) semidet
-%  Errore se W non è stato caricato
+%  Errore se W non ï¿½ stato caricato
 %
 pred(draw_content(any, point, content, number)).
 % draw_content(W, P, Cnt, Size):  disegna il contenuto
@@ -240,7 +240,7 @@ add_to_repository(_LW) :-
 	writeln('repository.pl non esiste, crealo'),
 	fail.
 
-% fact(W, F) : il fatto F è una proprietà del mondo W da memorizzare su
+% fact(W, F) : il fatto F ï¿½ una proprietï¿½ del mondo W da memorizzare su
 % file; world(W,DX,DY) viene memorizzato come r_world(W,DX,DY)
 % content(W,Point,Cnt) viene memorizzato come r_content(W,Point,Cnt)
 fact(W, r_world(W,DX,DY)) :-
@@ -269,6 +269,7 @@ represents(delivery(_), K, p(NK)):-
 represents(delivery(_), a, c0).
 represents(delivery(_), b, c1).
 
+
 char_world(cw(1),[
 'OOOOOOOOOOOOOOOOOOOO',
 'O                  O',
@@ -276,11 +277,10 @@ char_world(cw(1),[
 'O   OOOOO    OO    O',
 'O   OOOOO    OO    O',
 'O                  O',
-'O     OOOOOOOO	    O',
+'O     OOOOOOOO     O',
 'O     OOOOOOOO     O',
 'O                  O',
 'OOOOOOOOOOOOOOOOOOOO']).
-
 
 char_world(cw(2),[
 'OOOOOOOOOOOOOOOOOOOO',
@@ -350,7 +350,7 @@ char_world(diag, [
 
 open_pred(fig_of(any,content,fig, number)).
 %  fig_of(W, Cnt, Fig, Size) :  nel mondo W il
-%  contenuto Cnt è rappresentato da Fig, che viene iscritta in un
+%  contenuto Cnt ï¿½ rappresentato da Fig, che viene iscritta in un
 %  quadretto di dimensione Size (quella della quadrettatura usata in W)
 %  MODO (++,++,--,--,--) semidet. Fallisce se non ci sono figure che
 %  rappresentano Cnt

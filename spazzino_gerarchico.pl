@@ -12,7 +12,7 @@ raccoglitore_gerarchico_help :- maplist(write, [
 '\nRaccoglitore gerarchico,  provare:\n',
 '\n?- load_world(cw(1)).',
 '\n  raccolta(mondo, punto di partenza, lista di cassonetti, punto di alta densita, punto di bassa densita, benzinaio, deposito, capienza serbatoio, capienza camion)',
-'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)],point(2,2), point(8,8),point(3,3),point(3,2),35,15).',
+'\n?- raccolta(cw(1), point(6,8),[point(2,9), point(8,3)],point(2,2), point(8,4),point(3,3),point(3,2),35,15).',
 '\n?- action_plan(Stato, Azione, Piano, Costo).',
 '\n***********************************************************\n']).
 :- raccoglitore_gerarchico_help.
@@ -327,7 +327,7 @@ two_level_planner:action_starting_state(va_da_a(P1,P2), [in(P1), target(P2)]).
 %  i piani di esecuzione (livello 1) delle macro-azioni
 %===================================================
 
-pred(raccolta(atom, point, list(point), point, point, point, point, integer, integer, list(action), number)).
+pred(raccolta(atom, point, list(point), point, point, point, point, integer, integer)).
 %  raccolta(W, P, Raccolta, Q, B, Plan, Cost) : il mondo W � stato
 %  caricato, l'agente si trova inzialmente in P, deve passare per i
 %  punti Raccolta e depositare in Q. Può fare rifornimento in B Plan � il piano di raccolta con
@@ -379,8 +379,10 @@ draw_world_state(W) :-
 	draw_fig(W, circ(15,[col(green)]), Pos),
 	forall(deve_prendere(PR),
 		(cassonetto(PR, alta, _) ->
+			% i cassonetti appartenenti all'area ad alta densità sono blu
 		 	draw_fig(W, box(15,[col(blue)]), PR)
 		 	;
+			% i cassonetti appartenenti all'area a bassa densità sono viola
 		 	draw_fig(W, box(15,[col(purple)]), PR))),
 	deposito(Q),
         draw_fig(W, box(15,[col(orange)]), Q),
