@@ -46,11 +46,13 @@ type([va(point,point), va_da_a(point,point), raccoglie, deposita, rifornimento, 
 type([alta,bassa]:densita).
 
 pred(serbatoio(integer)).
-%  serbatoio(S) :- livello di benzina S
+%  serbatoio(S) : benzina S attualmente disponibile
 :- dynamic(serbatoio/1).
 
 pred(capienza_serbatoio(integer)).
+% capienza_serbatoio(C) : capienza del serbatoio del camion
 pred(capienza_camion(integer)).
+% capienza_camino(C) : quantità massima di rifiuti trasportabili C
 
 pred(in(point)).
 %  in(P) :  l'agente si trova in P
@@ -79,7 +81,7 @@ pred(cassonetto(point,densita,integer)).
 
 pred(upper_bound(densita, integer)).
 % MODO(++, --) det; MODO(++, --) det;
-% upper_bound(D,Q) : Q limite di spazzatura nei cassonetti di aree com densità D
+% upper_bound(D,Q) : Q limite massimo di spazzatura nei cassonetti di aree com densità D
 upper_bound(alta, 8).
 upper_bound(bassa,4).
 
@@ -88,19 +90,22 @@ pred(inizializza_cassonetto(point, point, point)).
 %  rifiuti casuale dipendenti dall'area di appartenenza
 
 inizializza_cassonetto(P, Da, Db) :-
+% calcolo dell'area di appartenenza
 	distance(diagonal,P,Da,A),
 	distance(diagonal,P,Db,B),
-	A @> B,
+	A @> B, !,
+%	generazione valore
 	upper_bound(alta, Ub),
 	random_between(4, Ub, R),
-	assert(cassonetto(P,alta,R)).
+	assert(cassonetto(P,alta,5)).
+%	Cambia il 5 con R finito il testing
 
 inizializza_cassonetto(P, Da, Db) :-
-	distance(diagonal,P,Da,A),
-	distance(diagonal,P,Db,B),
+%	generazione valore
 	upper_bound(bassa, Ub),
 	random_between(1, Ub, R),
-	assert(cassonetto(P,bassa,R)).
+	assert(cassonetto(P,bassa,2)).
+% cambia il 2 con R finito il testing
 
 %==================================================
 %  Implemento i predicati aperti di two_level_planner
@@ -114,85 +119,88 @@ two_level_planner:add_del(0, deposita, St, [fine], [deposito(P)], 0.5) :-
 	member(deposito(P), St),
 	member(in(P), St).
 
+% scarica
 two_level_planner:add_del(0, scarica, St, [carico(0)], [carico(C)], 0.5) :-
+% azione compiuta quando vi sono ancora cassonetti da svuotare ma non si ha
+% spazio a sufficienza per portare a termine la raccolta
+
+% Svuota il carico del camion
 	member(deve_prendere(_), St),
 	member(deposito(P), St),
 	member(in(P), St),
 	member(carico(C), St).
 
-two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
-	%controllo carico
-	member(carico(Ca), St),
-	capienza_camion(Cap),
-	cassonetto(P2,Dens,_),
-	upper_bound(Dens, Ub),
-	K is Cap - Ub,
-	Ca @=<  K,
-	%piano
-	not(member(deve_prendere(_), St)),
-	member(deposito(P2), St),
-	member(in(P1), St),
-	P1 \= P2,
-	get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
-	%controllo serbatoio
-	member(serbatoio(X), St),
-	C is round(Cost),
-	C @< X,
-	Y is X - C.
 
+% vai al cassonetto
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
-	%controllo capienza
+% azione che permette di raggiungere un cassonetto del mondo decrementando
+% il qunatitativo di benzona disponibile
+
+% controllo che sia possibile svuotare interamente il cassonetto, controllando
+% che la capienza del camion - l'upperbound dell'area del cassonetto sia <= al
+% carico trasportabile residuo
 	member(carico(Ca), St),
 	capienza_camion(Cap),
 	cassonetto(P2,Dens,_),
 	upper_bound(Dens, Ub),
 	K is Cap - Ub,
 	Ca @=< K,
-	%piano
+% generazione del piano
 	member(deve_prendere(P2),St),
 	member(in(P1), St),
 	P1 \= P2,
 	get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
-	%controllo serbatoio
+% controllo che sia effettivamente possibile raggiungere il cassonetto
+% con il livello di benzina attuale
 	member(serbatoio(X), St),
 	C is round(Cost),
 	C @< X,
 	Y is X - C.
 
-%benzinaio
+%vai al benzinaio
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
-	%piano
+% azione che permette di raggiungere la stazione di rifornimento quando non è
+% possibile raggiungere alcun cassonetto
+
+% generazione del piano
 	member(in(P1), St),
 	member(benzinaio(P2), St),
 	P1 \= P2,
 	get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
-	% controllo serbatoio
+% controllo che sia effettivamente possibile raggiungere il benzinaio
+% con il livello di benzina attuale
 	member(serbatoio(X), St),
 	C is round(Cost),
 	Y is X - C,
 	Y @>= 0.
 
-%svuota carico
+%vai al deposito
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
+% azione che permette di raggiungere il deposito quando non è possibile
+% raggiungere alcun cassonetto
 	member(deposito(P2),St),
 	member(in(P1), St),
 	P1 \= P2,
 	get_action_plan([in(P1), tager(P2)], va_da_a(P1,P2), _Plan, Cost),
-	%controllo serbatoio
+% controllo che sia effettivamente possibile raggiungere il deposito
+% con il livello di benzina attuale
 	member(serbatoio(X), St),
 	C is round(Cost),
 	C @< X,
 	Y is X - C.
 
-
+% raccogli cassonetto
 two_level_planner:add_del(0,raccoglie, St, [carico(Y)], [deve_prendere(P),carico(X)], 0.5) :-
+% azione che permette di raccogliere tutto il contenuto di ogni cassonetto
 	member(deve_prendere(P), St),
 	member(in(P), St),
 	member(carico(X), St),
 	cassonetto(P,_,Q),
 	Y is X + Q.
 
+% rifornimento
 two_level_planner:add_del(0,rifornimento, St, [serbatoio(C)], [serbatoio(X)], 0.5) :-
+% azione che permette di riempire il serbatoio del camion
 	member(serbatoio(X), St),
 	member(in(P), St),
 	member(benzinaio(P), St),
@@ -201,6 +209,7 @@ two_level_planner:add_del(0,rifornimento, St, [serbatoio(C)], [serbatoio(X)], 0.
 %=====================================
 %    AZIONI DI LIVELLO 1
 %=====================================
+
 two_level_planner:add_del(1,va(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
 	member(in(P1), St),
 	step(Dir,P1,P2), % P2 raggiungibile in un passo in una direzione Dir
@@ -208,28 +217,151 @@ two_level_planner:add_del(1,va(P1,P2), St, [in(P2)], [in(P1)], Cost) :-
 	not(content(W,P2,ostacolo)),
 	length_step(Dir,Cost).  %distanza nella direzione di spostamento
 
-%=====================================
-%    EURISTICA DI LIVELLO 0
-%=====================================
+%==================================
+%			P_MERGE_SORT
+%==================================
 
-pred(distanza(list(any), point, integer)).
-% distanza(L, P, I) : I =somma delle distanze tra P e i punti della lista L
+% funzionamento analogo al merge_sort usuale ma con ordinamento rispetto a
+% un punto dato (Pivot)
+
+pred(split(list(point), list(point), list(point))).
+% divido in due una lista data MODO(++,--,--)det.
+% split(L,L1,L2) : L viene divisa in L1 e L2
+split([], [], []).
+split([X|Y], [X|Xs], Ys) :- split(Y,Ys,Xs).
+
+pred(p_merge(point, list(point), list(point), list(point))).
+% p_merge(Pivot, L1, L2, L):
+% fonde ordinatamente due liste ordinate L1 e L2 in L rispetto al Pivot
+% MODO(++,++,++,--)det.
+p_merge(Pivot, X, [], X).
+p_merge(Pivot, [], X, X).
+p_merge(Pivot, [X|Tx], [Y|Ty], [X|Tz]) :-
+							distance(diagonal, Pivot, X, Dx),
+							distance(diagonal, Pivot, Y, Dy),
+							Dx @=< Dy, !,
+							p_merge(Pivot, Tx,[Y|Ty], Tz).
+
+p_merge(Pivot, [X|Tx], [Y|Ty], [Y|Tz]) :-
+							p_merge(Pivot, [X|Tx], Ty, Tz).
+
+
+pred(p_merge_sort(point, list(point), list(point))).
+% p_merge_sort(Pivot, L1, L2) :- ordina L1 in L2 rispetto al Pivot
+% MODO(++,++,--)det
+p_merge_sort(Pivot, [], []).
+p_merge_sort(Pivot, [H], [H]).
+p_merge_sort(Pivot, [X, Y| T], R) :-
+							split(T, T1, T2),
+							p_merge_sort(Pivot, [X|T1], L1) ,
+							p_merge_sort(Pivot, [Y|T2], L2),
+							p_merge(Pivot, L1, L2, R).
+
+%==================================
+%			LONGEST
+%==================================
+
+pred(longest(point,list(point), point)).
+% MODO(++,++,--)det
+% nearest(P,L,N) : N è il punto appartente alla lista L più lontano da P
+longest(P,[X], X).
+longest(P, [X,Y|T], N) :-
+		distance(diagonal,X,P,Dx),
+		distance(diagonal,Y,P,Dy),
+		Dx @> Dy, !,
+		longest(P,[X|T], N).
+
+longest(P, [X,Y|T], N) :-
+		longest(P,[Y|T], N).
+
+%========================================
+%    DISTANZA_ES (ES = euristica sottostimata)
+%========================================
+
+pred(distanza_es(list(any), point, integer)).
+% distanza_es(L, P, I) : I = somma della distanza relativa tra i punti della
+% lista L partendo da P
 % Modo(++,++,--)det
-distanza([], P, 0).
-distanza([H], P, I):- distance(diagonal,H,P,I).
-distanza([H|T], P, I):- distanza(T, P, It), distance(diagonal,H,P,Ih), I is It + Ih.
+		distanza_es([], P, 0).
+		distanza_es([H], P, I):- distance(diagonal,H,P,I).
+		distanza_es([H|T], P, I):- distanza_es(T, H, It), distance(diagonal,H,P,Ih), I is It + Ih.
+
+%========================================
+%    DISTANZA_ENS (ENS = euristica non sottostimata)
+%========================================
+
+pred(distanza_ens(list(any), point, integer)).
+% distanza_es(L, P, I) : I = somma delle distanze tra P e ogni punto della lista L
+% Modo(++,++,--)det
+		distanza_ens([], P, 0).
+		distanza_ens([H], P, I):- distance(diagonal,H,P,I).
+		distanza_ens([H|T], P, I):- distanza_ens(T, P, It), distance(diagonal,H,P,Ih), I is It + Ih.
+
+
+%==================================
+%			ADD
+%==================================
+
+pred(add(list(point), point, list(point)).
+% MODO(++,++,--)det.
+% add(L,P, R) : R è [R|P] aggiunge in coda ad Lil punto P
+add(X,P,[P|X]).
+
+%=====================================
+%    EURISTICHE DI LIVELLO 0
+%=====================================
 
 two_level_planner:h(0, St, 0) :-
 	member(fine,St), !.
+
+%******************************************************************************
+% EURISTICA sottstimata con branching factor troppo elevato
+%two_level_planner:h(0, St, H) :-
+% L'euristica viene calcolata sommando la distnza dal punto punto di partenza al cassonetto
+% più lontano con la distanza tra il cassonetto più lontano e il deposito
+%	setof(X, member(deve_prendere(X), St), Pos) ->
+%		in(P),
+%		deposito(D),
+%		longest(P,Pos,L),
+%		distance(diagonal,P,L, Andata),
+%		distance(diagonal,L,D, Ritorno),
+%		H is Ritorno +  Andata
+%		;
+%  	H = 0.
+
+
+%******************************************************************************
+% EURISTICA ES sottostimata ma con branching factor accettabile
+%two_level_planner:h(0, St, H) :-
+% L'euristica viene calcolata trovando il cammino minimo per raggiungere tutti i cassonetti
+% e il benzinaio partendo dal punto di partenza e terminando nel deposito
+%	setof(X, member(deve_prendere(X), St), Pos) ->
+%		in(P),
+%		deposito(D),
+
+		%add(Pos, B, L1),
+%		p_merge_sort(P,Pos, Ord),
+%		add(Ord, D, Punti),
+%		distanza_es(Punti ,P, H)
+%		;
+%		H = 0.
+
+
+%******************************************************************************
+
+% EURISTICA ENS non sottostimata con branching factor molto basso
+% L'euristica somma la distanza tra ogni cassonetto che deve raccogliere +
+% punto di partenza e il deposito
 two_level_planner:h(0, St, H) :-
-	%  L'euristica viene calcolata stimando la somma delle distanze di andata e ritorno
-	%  tra ogni cassonetto e il deposito
-	setof(X, member(deve_prendere(X), St), Pos) ->
-		length(Pos, NumCassonetti),
+		setof(X, member(deve_prendere(X), St), Pos) ->
 		deposito(D),
-		distanza(Pos,D, V),
-		H is  V * 2;
+		in(P),
+		add(Pos,P, Res),
+		distanza_ens(Res,D, V),
+		H is  V * 2
+		;
 		H = 0.
+
 
 %=====================================
 %    EURISTICA DI LIVELLO 1
@@ -244,9 +376,9 @@ two_level_planner:h(1, St, H) :-
 %=======================================
 %
 two_level_planner:starting_state([P1, PuntiRaccolta, P2, P3],
-		                 [in(P1), deposito(P2), benzinaio(P3), carico(0), serbatoio(X) | FluentiRaccolta]) :-
+		              [in(P1), deposito(P2), benzinaio(P3), carico(0), serbatoio(X) | FluentiRaccolta]) :-
 	setof(deve_prendere(X), member(X, PuntiRaccolta), FluentiRaccolta), serbatoio(X).
-	%  [in(P1), deposito(P2), benzinaio(P3) | FluentiRaccolta] sono i fluenti veri nello stato iniziale
+	%  [in(P1), deposito(P2), benzinaio(P3), carico(0), serbatoio(X) | FluentiRaccolta] sono i fluenti veri nello stato iniziale
 
 two_level_planner:goal_state(_Param, G) :-
 	member(fine, G).
@@ -273,8 +405,10 @@ two_level_planner:macro_azione(va_da_a(_,_)).
 %  unica macro-azione
 
 two_level_planner:esegui_azione_base(va(P1,P2)) :-
+%	aggiornamento della posizione dell'agente
 	retract(in(P1)),
 	assert(in(P2)),
+%	aggiornamento del serbatoio
 	serbatoio(S),
 	N_S is S - 1,
 	retract(serbatoio(S)),
@@ -282,12 +416,16 @@ two_level_planner:esegui_azione_base(va(P1,P2)) :-
 	simula(va(P1,P2)).
 
 two_level_planner:esegui_azione_base(deposita) :-
+%	aggiornamento del carico quando non vi sono
+% più cassonetti da svuotare
 	retract(carico(C)),
 	assert(carico(0)),
 	simula(deposita).
 
 
 two_level_planner:esegui_azione_base(scarica) :-
+% aggiornamento del carico quando ci sono ancora
+%	cassonetti da raccogliere
 	retract(carico(C)),
 	assert(carico(0)),
 	simula(scarica).
@@ -295,22 +433,24 @@ two_level_planner:esegui_azione_base(scarica) :-
 two_level_planner:esegui_azione_base(rifornimento) :-
 	benzinaio(P3),
 	in(P3),
+%	aggiornamento del serbatoio
 	serbatoio(Se),
-	step(['Serbatoio: ' , Se]),
+	step(['Serbatoio prima del rifornimento: ' , Se]),
 	retract(serbatoio(S)),
 	capienza_serbatoio(C),
-	step(['Capienza; ', C]),
 	assert(serbatoio(C)),
 	simula(rifornimento).
 
 two_level_planner:esegui_azione_base(raccoglie) :-
 	in(P),
 	retract(deve_prendere(P)),
+%	aggiornamento del carico
 	carico(C),
 	cassonetto(P,A,X),
 	N_C is C + X,
 	retract(carico(C)),
 	assert(carico(N_C)),
+% aggionemento del cassonetto
 	retract(cassonetto(P, A, X)),
 	assert(cassonetto(P, A, 0)),
 	simula(raccogli(P)).
@@ -328,14 +468,16 @@ two_level_planner:action_starting_state(va_da_a(P1,P2), [in(P1), target(P2)]).
 %===================================================
 
 pred(raccolta(atom, point, list(point), point, point, point, point, integer, integer)).
-%  raccolta(W, P, Raccolta, Q, B, Plan, Cost) : il mondo W � stato
+%  raccolta(W, P, Raccolta, Da, Db, B, Q, C, A) : il mondo W � stato
 %  caricato, l'agente si trova inzialmente in P, deve passare per i
-%  punti Raccolta e depositare in Q. Può fare rifornimento in B Plan � il piano di raccolta con
-%  costo Cost.
-%  MODO (+,+,+,+,+) semidet, FALLISCE se W non � caricato
-%
+%  punti Raccolta e depositare in Q. Può fare rifornimento in B.
+%  Da rappresenta l'area di alta densità, Db quella a bassa densità.
+%  C è la capienza_serbatoio e A è la capienza_camion
+%  MODO (+,+,+,+,+,+,+,+,+) semidet, FALLISCE se W non � caricato
+
+
 raccolta(W, Pos, Racc, Da, Db, B, Q, C, A) :-
-	% preparo lo stato iniziale del mondo+agente
+% preparo lo stato iniziale del mondo+agente
 	maplist(retractall, [in(_), deposito(_), deve_prendere(_), benzinaio(_), serbatoio(_), carico(_),
 	 							cassonetto(_,_,_), capienza_camion(_),capienza_serbatoio(_)]),
 	assert(in(Pos)),
@@ -347,42 +489,41 @@ raccolta(W, Pos, Racc, Da, Db, B, Q, C, A) :-
 	forall(member(P,Racc), inizializza_cassonetto(P, Da, Db)),
 	assert(capienza_serbatoio(C)),
 	assert(capienza_camion(A)),
-	step(['Capienza ' , A]),
 
-	%  disegno il mondo e il suo stato
+%  disegno il mondo e il suo stato
 	set_current_world(W),
 	draw_world_state(W),
 
-	% fisso la strategia di default
+% fisso la strategia di default
 	set_strategy(astar),
 	set_strategy(ps(closed)),
 	step(['Avvio con strategia astar e potatura chiusi']),!,
 
-	%  calcolo il piano  di 2 livelli
+%  calcolo il piano  di 2 livelli
 	get_plan([Pos,Racc,Q,B], Plan, Cost),
 	step(['Calcolato il piano ',Plan, '\ncon costo ', Cost]),!,
 
-	%  eseguo il piano di 2 livelli
+%  eseguo il piano di 2 livelli
 	esegui(Plan).
 
 
 set_current_world(W) :-
-	%  disegno la parte statica del mondo
+%  disegno la parte statica del mondo
 	load_world(W),
 	retractall(current_world(_)),
 	assert(current_world(W)),
 	draw_loaded_world(W,20).
 
 draw_world_state(W) :-
-	% disegno lo stato corrente del mondo
+% disegno lo stato corrente del mondo
 	in(Pos),
 	draw_fig(W, circ(15,[col(green)]), Pos),
 	forall(deve_prendere(PR),
 		(cassonetto(PR, alta, _) ->
-			% i cassonetti appartenenti all'area ad alta densità sono blu
+% i cassonetti appartenenti all'area ad alta densità sono blu
 		 	draw_fig(W, box(15,[col(blue)]), PR)
 		 	;
-			% i cassonetti appartenenti all'area a bassa densità sono viola
+% i cassonetti appartenenti all'area a bassa densità sono viola
 		 	draw_fig(W, box(15,[col(purple)]), PR))),
 	deposito(Q),
         draw_fig(W, box(15,[col(orange)]), Q),

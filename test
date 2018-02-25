@@ -1,0 +1,223 @@
+%euristica S
+%euristica L
+%euristica F
+
+
+%I RISULTATI SONO SBAGLIATI CODDUE
+
+%============================
+%TEST 1 su due punti
+%============================
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ],point(2,2), point(10,8),point(3,3),point(3,2),35,15).
+
+    % per S
+    nodi espansi: 326; iterazioni: 287; profondita' soluzione: 7; costo: 24.759999999999998
+    b=2.28576240673525
+    Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
+    con costo 24.759999999999998
+
+    % per Fra
+    nodi espansi: 27; iterazioni: 29; profondita' soluzione: 8; costo: 26.18
+    b=1.509803648477105
+    Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
+    con costo 26.18
+
+
+%============================
+%TEST 2 su tre punti
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)],point(2,2), point(10,8),point(3,3),point(3,2),35,15).
+
+    % per S
+    nodi espansi: 196; iterazioni: 119; profondita' soluzione: 9; costo: 33.52
+    b=1.7976085250842222
+    Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,9)),raccoglie,va_da_a(point(9,9),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
+    con costo 33.52
+
+    % per F
+    nodi espansi: 27; iterazioni: 29; profondita' soluzione: 11; costo: 34.94
+    b=1.3493480275940617
+    Calcolato il piano [va_da_a(point(2,2),point(3,3)),va_da_a(point(3,3),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
+    con costo 34.94
+
+
+
+
+%============================
+%TEST 3 su quattro punti
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)],point(2,2), point(10,8),point(3,3),point(3,2),35,15).
+
+
+    % per S
+    nodi espansi: 54110; iterazioni: 35473; profondita' soluzione: 15; costo: 45.28
+    b=2.0680061958674334
+    Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,9)),raccoglie,va_da_a(point(9,9),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
+    con costo 45.28
+
+
+    % per F
+    nodi espansi: 390; iterazioni: 469; profondita' soluzione: 15; costo: 46.38
+    b=1.4884616187302904
+    Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),deposita]
+    con costo 46.38
+
+
+%============================
+%TEST 4 su cinque punti
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13)],point(2,2), point(10,8),point(3,3),point(3,2),35,15).
+
+
+    % per S
+      ERROR: Out of global stack
+
+    % per F
+        nodi espansi: 44; iterazioni: 29; profondita' soluzione: 19; costo: 61.06
+        b=1.2203868217147815
+        Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),deposita]
+        con costo 61.06
+
+
+%============================
+%TEST 5 su due punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ],point(2,2), point(10,8),point(3,3),point(3,2),35,8).
+
+    % per S
+    nodi espansi: 508; iterazioni: 527; profondita' soluzione: 10; costo: 27.259999999999998
+    b=1.8646029682169476
+    Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
+    con costo 27.259999999999998
+
+    %per F
+    nodi espansi: 131; iterazioni: 141; profondita' soluzione: 10; costo: 27.259999999999998
+    b=1.6282726554257878
+    Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
+    con costo 27.259999999999998
+
+
+%============================
+%TEST 6 su tre punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)],point(2,2), point(10,8),point(3,3),point(3,2),35,8).
+
+
+    % per S
+    nodi espansi: 15996; iterazioni: 17655; profondita' soluzione: 15; costo: 48.96
+    b=1.9066344085689941
+    Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),deposita]
+    con costo 48.96
+
+    %per F
+    nodi espansi: 80; iterazioni: 79; profondita' soluzione: 15; costo: 49.54
+    b=1.3392839547026258
+    con costo 49.54
+
+
+%============================
+%TEST 7 su quattro punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)],point(2,2), point(10,8),point(3,3),point(3,2),35,8).
+
+
+    %per S
+        nodi espansi: 179117; iterazioni: 348893; profondita' soluzione: 19; costo: 60.22
+        b=1.8900830375043023
+        Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
+        con costo 60.22
+
+    %per F
+        nodi espansi: 269; iterazioni: 265; profondita' soluzione: 19; costo: 60.22000000000001
+        b=1.3423992441383337
+        Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),deposita]
+        con costo 60.22000000000001
+
+
+
+%============================
+%TEST 8 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13)],point(2,2), point(10,8),point(3,3),point(3,2),35,8).
+
+    %per S
+        ERROR: Out of global stack
+
+
+    %per F
+        nodi espansi: 16637; iterazioni: 15937; profondita' soluzione: 23; costo: 82.32000000000001
+        b=1.5258962324648047
+        Calcolato il piano [va_da_a(point(2,2),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),deposita]
+        con costo 82.32000000000001
+
+
+
+%============================
+%TEST 9 su sei punti
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(2,13), point(2, 15)],point(2,6), point(10,8),point(3,3),point(3,2),35,15).
+
+%============================
+%TEST 10 su sette punti
+%============================
+
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(2,13), point(2, 15), point(2,17)],point(2,6), point(10,8),point(3,3),point(3,2),35,15).
+
+
+
+
+%============================
+%TEST 11 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+
+
+
+%============================
+%TEST 12 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+
+
+
+%============================
+%TEST 13 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+
+
+
+
+%============================
+%TEST 14 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+
+
+
+
+%============================
+%TEST 15 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+
+
+%============================
+%TEST 16 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
+
+
+
+
+
+%============================
+%TEST 17 su cinque punti VARIAZIONE capienza_camion minima (8)
+%============================
