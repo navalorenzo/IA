@@ -100,8 +100,8 @@ inizializza_cassonetto(P, Lista_aree, Lista_upperbound) :-
 %	generazione valore
 	info_area(Area, Ub),
 	random_between(1, Ub, R),
-	assert(cassonetto(P,Area,R)).
-%	Cambia il 5 con R finito il testing
+	assert(cassonetto(P,Area,3)).
+%	Cambia il 3 con R finito il testing
 
 %==================================================
 %  Implemento i predicati aperti di two_level_planner
@@ -325,7 +325,7 @@ two_level_planner:h(0, St, 0) :-
 	member(fine,St), !.
 
 %******************************************************************************
-% EURISTICA sottstimata con branching factor troppo elevato
+% EURISTICA ES_lenta sottstimata con branching factor troppo elevato
 %two_level_planner:h(0, St, H) :-
 % L'euristica viene calcolata sommando la distnza dal punto punto di partenza al cassonetto
 % più lontano con la distanza tra il cassonetto più lontano e il deposito
@@ -341,20 +341,18 @@ two_level_planner:h(0, St, 0) :-
 
 
 %******************************************************************************
-% EURISTICA ES sottostimata ma con branching factor accettabile
-%two_level_planner:h(0, St, H) :-
+% EURISTICA ES_veloce sottostimata ma con branching factor accettabile
+two_level_planner:h(0, St, H) :-
 % L'euristica viene calcolata trovando il cammino minimo per raggiungere tutti i cassonetti
 % e il benzinaio partendo dal punto di partenza e terminando nel deposito
-%	setof(X, member(deve_prendere(X), St), Pos) ->
-%		in(P),
-%		deposito(D),
-
-		%add(Pos, B, L1),
-%		p_merge_sort(P,Pos, Ord),
-%		add(Ord, D, Punti),
-%		distanza_es(Punti ,P, H)
-%		;
-%		H = 0.
+	setof(X, member(deve_prendere(X), St), Pos) ->
+		in(P),
+		deposito(D),
+		p_merge_sort(P,Pos, Ord),
+		add(Ord, D, Punti),
+		distanza_es(Punti ,P, H)
+		;
+		H = 0.
 
 
 %******************************************************************************
@@ -362,15 +360,15 @@ two_level_planner:h(0, St, 0) :-
 % EURISTICA ENS non sottostimata con branching factor molto basso
 % L'euristica somma la distanza tra ogni cassonetto che deve raccogliere +
 % punto di partenza e il deposito
-two_level_planner:h(0, St, H) :-
-		setof(X, member(deve_prendere(X), St), Pos) ->
-		deposito(D),
-		in(P),
-		add(Pos,P, Res),
-		distanza_ens(Res,D, V),
-		H is  V * 2
-		;
-		H = 0.
+%two_level_planner:h(0, St, H) :-
+%		setof(X, member(deve_prendere(X), St), Pos) ->
+%		deposito(D),
+%		in(P),
+%		add(Pos,P, Res),
+%		distanza_ens(Res,D, V),
+%		H is  V * 2
+%		;
+%		H = 0.
 
 
 %=====================================
