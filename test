@@ -179,6 +179,8 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), poin
 %============================
 
 
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,8), point(8,2)], [4,7], point(3,3),point(3,2),35,15).
+
 
 
 %============================

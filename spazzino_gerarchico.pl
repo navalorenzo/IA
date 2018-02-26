@@ -11,8 +11,8 @@ raccoglitore_gerarchico_help :- maplist(write, [
 '\n***********************************************************',
 '\nRaccoglitore gerarchico,  provare:\n',
 '\n?- load_world(cw(1)).',
-'\n  raccolta(mondo, punto di partenza, lista di cassonetti, punto di alta densita, punto di bassa densita, benzinaio, deposito, capienza serbatoio, capienza camion)',
-'\n?- raccolta(cw(1), point(6,8),[point(2,9), point(8,3)],point(2,2), point(8,4),point(3,3),point(3,2),35,15).',
+'\n  raccolta(mondo, punto di partenza, lista di cassonetti, lista_aree, lista_upperbound, benzinaio, deposito, capienza serbatoio, capienza camion)',
+'\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)], [point(1,7), point(9,4)], [3,8], point(3,3),point(3,2),35,15).',
 '\n?- action_plan(Stato, Azione, Piano, Costo).',
 '\n***********************************************************\n']).
 :- raccoglitore_gerarchico_help.
@@ -42,8 +42,8 @@ type([va(point,point), va_da_a(point,point), raccoglie, deposita, rifornimento, 
 %  Predicati dinamici che rappresentano lo stato di
 %  mondo+agente
 %=================================================
-%
-type([alta,bassa]:densita).
+
+
 
 pred(serbatoio(integer)).
 %  serbatoio(S) : benzina S attualmente disponibile
@@ -74,38 +74,34 @@ pred(current_world(any)).
 %  current_world(W):  W � il mondo in cui si trova l'agente
 :- dynamic(current_world/1).
 
-pred(cassonetto(point,densita,integer)).
+pred(cassonetto(point,point,integer)).
 %  MODO(++,++, --)semidet;
-%  cassonetto(P,D, I) : il cassonetto si trova in P e contiene una quantità I
-%  di rifiuti dipendente dalla densita D
+%  cassonetto(P,A, I) : il cassonetto si trova in P e contiene una quantità I
+%  di rifiuti dipendente dall'area A
 
-pred(upper_bound(densita, integer)).
-% MODO(++, --) det; MODO(++, --) det;
-% upper_bound(D,Q) : Q limite massimo di spazzatura nei cassonetti di aree com densità D
-upper_bound(alta, 8).
-upper_bound(bassa,4).
 
-pred(inizializza_cassonetto(point, point, point)).
-%  inizializza_cassonetto(P,Da, Db) assegna a un cassonetto nel punto P una quantità di
+pred(info_area(point,integer)).
+:- dynamic(info_area/2).
+
+pred(make_area(list(point),list(integer))).
+%	date due liste inizializza le aree
+% MODO(++,++)det
+make_area([Ha], [Hu]) :- assert(info_area(Ha,Hu)).
+make_area([Ha|Ta], [Hu|Tu]) :- assert(info_area(Ha,Hu)) , make_area(Ta, Tu).
+
+
+pred(inizializza_cassonetto(point, list(point), list(integer))).
+%  inizializza_cassonetto(P,Lista_aree, Lista_upperbound) assegna a un cassonetto nel punto P una quantità di
 %  rifiuti casuale dipendenti dall'area di appartenenza
 
-inizializza_cassonetto(P, Da, Db) :-
+inizializza_cassonetto(P, Lista_aree, Lista_upperbound) :-
 % calcolo dell'area di appartenenza
-	distance(diagonal,P,Da,A),
-	distance(diagonal,P,Db,B),
-	A @> B, !,
+	nearest(P, Lista_aree, Area),
 %	generazione valore
-	upper_bound(alta, Ub),
-	random_between(4, Ub, R),
-	assert(cassonetto(P,alta,5)).
-%	Cambia il 5 con R finito il testing
-
-inizializza_cassonetto(P, Da, Db) :-
-%	generazione valore
-	upper_bound(bassa, Ub),
+	info_area(Area, Ub),
 	random_between(1, Ub, R),
-	assert(cassonetto(P,bassa,2)).
-% cambia il 2 con R finito il testing
+	assert(cassonetto(P,Area,R)).
+%	Cambia il 5 con R finito il testing
 
 %==================================================
 %  Implemento i predicati aperti di two_level_planner
@@ -142,7 +138,7 @@ two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1),
 	member(carico(Ca), St),
 	capienza_camion(Cap),
 	cassonetto(P2,Dens,_),
-	upper_bound(Dens, Ub),
+	info_area(Dens, Ub),
 	K is Cap - Ub,
 	Ca @=< K,
 % generazione del piano
@@ -258,12 +254,12 @@ p_merge_sort(Pivot, [X, Y| T], R) :-
 							p_merge(Pivot, L1, L2, R).
 
 %==================================
-%			LONGEST
+%			LONGEST & NEAREST
 %==================================
 
 pred(longest(point,list(point), point)).
 % MODO(++,++,--)det
-% nearest(P,L,N) : N è il punto appartente alla lista L più lontano da P
+% longest(P,L,N) : N è il punto appartente alla lista L più lontano da P
 longest(P,[X], X).
 longest(P, [X,Y|T], N) :-
 		distance(diagonal,X,P,Dx),
@@ -273,6 +269,20 @@ longest(P, [X,Y|T], N) :-
 
 longest(P, [X,Y|T], N) :-
 		longest(P,[Y|T], N).
+
+
+pred(nearest(point,list(point), point)).
+% MODO(++,++,--)det
+% nearest(P,L,N) : N è il punto appartente alla lista L più vicino a P
+nearest(P,[X], X).
+nearest(P, [X,Y|T], N) :-
+		distance(diagonal,X,P,Dx),
+		distance(diagonal,Y,P,Dy),
+		Dx @< Dy, !,
+		nearest(P,[X|T], N).
+
+nearest(P, [X,Y|T], N) :-
+		nearest(P,[Y|T], N).
 
 %========================================
 %    DISTANZA_ES (ES = euristica sottostimata)
@@ -302,7 +312,7 @@ pred(distanza_ens(list(any), point, integer)).
 %			ADD
 %==================================
 
-pred(add(list(point), point, list(point)).
+pred(add(list(point), point, list(point))).
 % MODO(++,++,--)det.
 % add(L,P, R) : R è [R|P] aggiunge in coda ad Lil punto P
 add(X,P,[P|X]).
@@ -447,6 +457,7 @@ two_level_planner:esegui_azione_base(raccoglie) :-
 %	aggiornamento del carico
 	carico(C),
 	cassonetto(P,A,X),
+	step(['Cassonetto di area ', A]),
 	N_C is C + X,
 	retract(carico(C)),
 	assert(carico(N_C)),
@@ -467,26 +478,32 @@ two_level_planner:action_starting_state(va_da_a(P1,P2), [in(P1), target(P2)]).
 %  i piani di esecuzione (livello 1) delle macro-azioni
 %===================================================
 
-pred(raccolta(atom, point, list(point), point, point, point, point, integer, integer)).
-%  raccolta(W, P, Raccolta, Da, Db, B, Q, C, A) : il mondo W � stato
+pred(raccolta(atom, point, list(point), list(point), list(integer), point, point, integer, integer)).
+%  raccolta(W, P, Raccolta, Lista_aree, Lista_upperbound, B, Q, C, A) : il mondo W � stato
 %  caricato, l'agente si trova inzialmente in P, deve passare per i
 %  punti Raccolta e depositare in Q. Può fare rifornimento in B.
-%  Da rappresenta l'area di alta densità, Db quella a bassa densità.
+%  Lista_aree  lista contenente i punti che rappresentano le diverse distribuzioni di densita nel mondo
+%	 Lista_upperbound lista che rappresenta gli upperbound corrispondenti ai punti contenuti in Lista_aree
 %  C è la capienza_serbatoio e A è la capienza_camion
 %  MODO (+,+,+,+,+,+,+,+,+) semidet, FALLISCE se W non � caricato
 
 
-raccolta(W, Pos, Racc, Da, Db, B, Q, C, A) :-
+raccolta(W, Pos, Racc, Lista_aree, Lista_upperbound, B, Q, C, A) :-
 % preparo lo stato iniziale del mondo+agente
 	maplist(retractall, [in(_), deposito(_), deve_prendere(_), benzinaio(_), serbatoio(_), carico(_),
-	 							cassonetto(_,_,_), capienza_camion(_),capienza_serbatoio(_)]),
+	 							cassonetto(_,_,_), capienza_camion(_),capienza_serbatoio(_), info_area(_,_)]),
+	length(Lista_aree, La),
+	length(Lista_upperbound, Lu),
+	% le due liste devono essere lunghe uguali
+	La == Lu,
+	make_area(Lista_aree, Lista_upperbound),
 	assert(in(Pos)),
 	assert(deposito(Q)),
 	assert(benzinaio(B)),
 	assert(serbatoio(C)),
 	assert(carico(0)),
 	forall(member(P,Racc), assert(deve_prendere(P))),
-	forall(member(P,Racc), inizializza_cassonetto(P, Da, Db)),
+	forall(member(P,Racc), inizializza_cassonetto(P, Lista_aree, Lista_upperbound)),
 	assert(capienza_serbatoio(C)),
 	assert(capienza_camion(A)),
 
@@ -519,12 +536,7 @@ draw_world_state(W) :-
 	in(Pos),
 	draw_fig(W, circ(15,[col(green)]), Pos),
 	forall(deve_prendere(PR),
-		(cassonetto(PR, alta, _) ->
-% i cassonetti appartenenti all'area ad alta densità sono blu
-		 	draw_fig(W, box(15,[col(blue)]), PR)
-		 	;
-% i cassonetti appartenenti all'area a bassa densità sono viola
-		 	draw_fig(W, box(15,[col(purple)]), PR))),
+					draw_fig(W, box(15,[col(blue)]), PR) ),
 	deposito(Q),
         draw_fig(W, box(15,[col(orange)]), Q),
 	benzinaio(B),
