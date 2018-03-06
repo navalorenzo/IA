@@ -4,26 +4,29 @@
 %============================
 
 % QUANTITA' DI SPAZZATUTA IN OGNI CASSONETTO = 3
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15),
 
     % per ES_lenta
-      nodi espansi: 844; iterazioni: 651; profondita' soluzione: 7; costo: 24.759999999999998
-      b=2.6184779491185965
+      nodi espansi: 844; iterazioni: 651; profondita' soluzione: 7; costo: 24,759999999999998
+      b=2,6184779491185965
       Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-      con costo 24.759999999999998
+      con costo 24,759999999999998
+      time = 0,170 seconds
 
     % per ES_veloce
-      nodi espansi: 300; iterazioni: 261; profondita' soluzione: 7; costo: 24.759999999999998
-      b=2.2587827631437314
+      nodi espansi: 300; iterazioni: 261; profondita' soluzione: 7; costo: 24,759999999999998
+      b=2,2587827631437314
       Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-      con costo 24.759999999999998
+      con costo 24,759999999999998
+      time =  0,109 seconds
 
 
     % per ENS
-      nodi espansi: 27; iterazioni: 29; profondita' soluzione: 8; costo: 26.18
-      b=1.509803648477105
+      nodi espansi: 27; iterazioni: 29; profondita' soluzione: 8; costo: 26,18
+      b=1,509803648477105
       Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-      con costo 26.18
+      con costo 26,18
+      time = 0,109 seconds
 
 
 
@@ -31,26 +34,29 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,7), point(10,8)],
 %TEST 2 su tre punti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15),
 
     % per ES_lenta
-      nodi espansi: 4587; iterazioni: 2671; profondita' soluzione: 9; costo: 33.52
-      b=2.5517406180501725
+      nodi espansi: 4587; iterazioni: 2671; profondita' soluzione: 9; costo: 33,52
+      b=2,5517406180501725
       Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,9)),raccoglie,va_da_a(point(9,9),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-      con costo 33.52
+      con costo 33,52
+      time =  0,659 seconds
 
     % per ES_veloce
-      nodi espansi: 211; iterazioni: 127; profondita' soluzione: 9; costo: 33.52
-      b=1.81239813306352
+      nodi espansi: 211; iterazioni: 127; profondita' soluzione: 9; costo: 33,52
+      b=1,81239813306352
       Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,9)),raccoglie,va_da_a(point(9,9),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-      con costo 33.52
+      con costo 33,52
+      time =  0,234 seconds
 
 
     % per ENS
-      nodi espansi: 27; iterazioni: 29; profondita' soluzione: 11; costo: 34.94
-      b=1.3493480275940617
+      nodi espansi: 27; iterazioni: 29; profondita' soluzione: 11; costo: 34,94
+      b=1,3493480275940617
       Calcolato il piano [va_da_a(point(2,2),point(3,3)),va_da_a(point(3,3),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-      con costo 34.94
+      con costo 34,94
+      time = 0,133 seconds
 
 
 
@@ -59,27 +65,30 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)], [point(2,7), po
 %TEST 3 su quattro punti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15),
 
 
   % per ES_lenta
-    nodi espansi: 47579; iterazioni: 23837; profondita' soluzione: 13; costo: 36.28
-    b=2.2898191214604693
+    nodi espansi: 47579; iterazioni: 23837; profondita' soluzione: 13; costo: 36,28
+    b=2,2898191214604693
     Calcolato il piano [va_da_a(point(2,2),point(3,3)),va_da_a(point(3,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-    con costo 36.28
+    con costo 36,28
+    time = 9,160 seconds
 
   % per ES_veloce
-    nodi espansi: 3651; iterazioni: 2025; profondita' soluzione: 13; costo: 36.28
-    b=1.8794539079050194
+    nodi espansi: 3651; iterazioni: 2025; profondita' soluzione: 13; costo: 36,28
+    b=1,8794539079050194
     Calcolato il piano [va_da_a(point(2,2),point(3,3)),va_da_a(point(3,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-    con costo 36.28
+    con costo 36,28
+    time =  0,863 seconds
 
 
   % per ENS
-    nodi espansi: 27; iterazioni: 29; profondita' soluzione: 12; costo: 36.28
-    b=1.3160740129524924
+    nodi espansi: 27; iterazioni: 29; profondita' soluzione: 12; costo: 36,28
+    b=1,3160740129524924
     Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-    con costo 36.28
+    con costo 36,28
+    time =  0,172 seconds
 
 
 
@@ -87,45 +96,49 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)], [po
 %TEST 4 su cinque punti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15),
 
     % per ES_lenta
       ERROR: Out of global stack
 
     % per ES_veloce
-    nodi espansi: 46814; iterazioni: 29893; profondita' soluzione: 17; costo: 50.04
-    b=1.8824696599595896
+    nodi espansi: 46814; iterazioni: 29893; profondita' soluzione: 17; costo: 50,04
+    b=1,8824696599595896
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),deposita]
-    con costo 50.04
+    con costo 50,04
+    time = 16,737 seconds
 
     % per ENS
-    nodi espansi: 449; iterazioni: 489; profondita' soluzione: 18; costo: 51.46000000000001
-    b=1.403935057678421
+    nodi espansi: 449; iterazioni: 489; profondita' soluzione: 18; costo: 51,46000000000001
+    b=1,403935057678421
     Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-    con costo 51.46000000000001
+    con costo 51,46000000000001
+    time = 0,266 seconds
 
 
 %============================
 %TEST 5 su sei punti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15),
 
     % per ES_lenta
     ERROR: Out of global stack
 
 
     % per ES_veloce
-      nodi espansi: 88830; iterazioni: 51239; profondita' soluzione: 19; costo: 54.54
-      b=1.8215894759936566
+      nodi espansi: 88830; iterazioni: 51239; profondita' soluzione: 19; costo: 54,54
+      b=1,8215894759936566
       Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),deposita]
-      con costo 54.54
+      con costo 54,54
+      time =48,970 seconds
 
     %per ENS
-    nodi espansi: 631; iterazioni: 515; profondita' soluzione: 20; costo: 55.96000000000001
-    b=1.3803889304585202
+    nodi espansi: 631; iterazioni: 515; profondita' soluzione: 20; costo: 55,96000000000001
+    b=1,3803889304585202
     Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-    con costo 55.96000000000001
+    con costo 55,96000000000001
+    time = 0,381 seconds
 
 
 
@@ -133,29 +146,32 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), poin
 %TEST 6 su sette punti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15), point(8,5)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15), point(8,5)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),35,15),
 
     % per ES_veloce
     ERROR: Out of global stack
 
     %per ENS
-    nodi espansi: 41; iterazioni: 29; profondita' soluzione: 23; costo: 74.06
-    b=1.1752250428346294
+    nodi espansi: 41; iterazioni: 29; profondita' soluzione: 23; costo: 74,06
+    b=1,1752250428346294
     Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(8,5)),raccoglie,va_da_a(point(8,5),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(2,15)),raccoglie,va_da_a(point(2,15),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),deposita]
-    con costo 74.06
+    con costo 74,06
+    time = 0,572 seconds
+
 
 %============================
 %TEST 7 su venti punti
 %============================
 
 raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15), point(8,5),
-point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), point(2,16), point(3,17), point(4,18), point(7, 17), point(6,8), point(6,9), point(6,11)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),50,15).
+point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), point(2,16), point(3,17), point(4,18), point(7, 17), point(6,8), point(6,9), point(6,11)], [point(2,7), point(10,8)],[4,7],point(3,3),point(3,2),50,15),
 
     %per ENS
-    nodi espansi: 58; iterazioni: 49; profondita' soluzione: 58; costo: 169.85999999999996
-    b=1.0725163732240437
+    nodi espansi: 58; iterazioni: 49; profondita' soluzione: 58; costo: 169,85999999999996
+    b=1,0725163732240437
     Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(8,5)),raccoglie,va_da_a(point(8,5),point(4,10)),raccoglie,va_da_a(point(4,10),point(3,2)),scarica,va_da_a(point(3,2),point(6,8)),raccoglie,va_da_a(point(6,8),point(6,9)),raccoglie,va_da_a(point(6,9),point(6,11)),raccoglie,va_da_a(point(6,11),point(4,12)),raccoglie,va_da_a(point(4,12),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,10)),raccoglie,va_da_a(point(3,10),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(6,15)),raccoglie,va_da_a(point(6,15),point(7,17)),raccoglie,va_da_a(point(7,17),point(4,18)),raccoglie,va_da_a(point(4,18),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(2,16)),raccoglie,va_da_a(point(2,16),point(2,17)),raccoglie,va_da_a(point(2,17),point(3,17)),raccoglie,va_da_a(point(3,17),point(2,19)),raccoglie,va_da_a(point(2,19),point(3,3)),va_da_a(point(3,3),point(3,2)),deposita]
-    con costo 169.85999999999996
+    con costo 169,85999999999996
+    time =  3,496 seconds
 
 
 % QUANTITA' DI SPAZZATUTA IN OGNI CASSONETTO = 3
@@ -163,51 +179,57 @@ point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), po
 %TEST 8 su due punti VARIAZIONE capienza_camion minima (3)
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3),
 
     %per ES_lenta
-    nodi espansi: 1580; iterazioni: 1395; profondita' soluzione: 10; costo: 27.259999999999998
-    b=2.0886501845204197
+    nodi espansi: 1580; iterazioni: 1395; profondita' soluzione: 10; costo: 27,259999999999998
+    b=2,0886501845204197
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-    con costo 27.259999999999998
+    con costo 27,259999999999998
+    time =  0,250
 
     % per ES_veloce
-    nodi espansi: 490; iterazioni: 505; profondita' soluzione: 9; costo: 27.259999999999998
-    b=1.9902639451171027
+    nodi espansi: 490; iterazioni: 505; profondita' soluzione: 9; costo: 27,259999999999998
+    b=1,9902639451171027
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-    con costo 27.259999999999998
+    con costo 27,259999999999998
+    time =  0,156
 
     %per ENS
-    nodi espansi: 131; iterazioni: 141; profondita' soluzione: 10; costo: 27.259999999999998
-    b=1.6282726554257878
+    nodi espansi: 131; iterazioni: 141; profondita' soluzione: 10; costo: 27,259999999999998
+    b=1,6282726554257878
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-    con costo 27.259999999999998
+    con costo 27,259999999999998
+    time =  0,125
 
 
 %============================
 %TEST 9 su tre punti VARIAZIONE capienza_camion minima (3)
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3),
 
     % per ES_lenta
-    nodi espansi: 39415; iterazioni: 62091; profondita' soluzione: 15; costo: 48.96
-    b=2.024778102549261
+    nodi espansi: 39415; iterazioni: 62091; profondita' soluzione: 15; costo: 48,96
+    b=2,024778102549261
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-    con costo 48.96
+    con costo 48,96
+    time = 10,600
 
 
     % per ES_veloce
-    nodi espansi: 15136; iterazioni: 15877; profondita' soluzione: 15; costo: 48.96
-    b=1.8996229505865174
+    nodi espansi: 15136; iterazioni: 15877; profondita' soluzione: 15; costo: 48,96
+    b=1,8996229505865174
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),deposita]
-    con costo 48.96
+    con costo 48,96
+    time = 3,636
 
     %per ENS
-    nodi espansi: 90; iterazioni: 83; profondita' soluzione: 16; costo: 49.54
-    b=1.3247689997072474
+    nodi espansi: 90; iterazioni: 83; profondita' soluzione: 16; costo: 49,54
+    b=1,3247689997072474
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),deposita]
-    con costo 49.54
+    con costo 49,54
+    time =  0,312
 
 
 
@@ -216,23 +238,25 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9)], [point(2,7), po
 %============================
 
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3),
 
     % per ES_lenta
     ERROR: Out of global stack
 
     % per ES_veloce
-    nodi espansi: 164449; iterazioni: 319655; profondita' soluzione: 19; costo: 60.22
-    b=1.8816028397328497
+    nodi espansi: 164449; iterazioni: 319655; profondita' soluzione: 19; costo: 60,22
+    b=1,8816028397328497
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),deposita]
-    con costo 60.22
+    con costo 60,22
+    time = 125,541
 
 
     %per ENS
-    nodi espansi: 269; iterazioni: 265; profondita' soluzione: 19; costo: 60.22000000000001
-    b=1.3423992441383337
+    nodi espansi: 269; iterazioni: 265; profondita' soluzione: 19; costo: 60,22000000000001
+    b=1,3423992441383337
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),deposita]
-    con costo 60.22000000000001
+    con costo 60,22
+    time = 0,937
 
 
 %============================
@@ -248,10 +272,11 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), poin
 
 
     %per ENS
-    nodi espansi: 15030; iterazioni: 12523; profondita' soluzione: 27; costo: 84.82000000000001
-    b=1.4279144366436476
+    nodi espansi: 15030; iterazioni: 12523; profondita' soluzione: 27; costo: 84,82000000000001
+    b=1,4279144366436476
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),va_da_a(point(2,9),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),va_da_a(point(3,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),deposita]
-    con costo 84.82000000000001
+    con costo 84,82000000000001
+    time = 7,494 seconds
 
 
 
@@ -259,27 +284,28 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), poin
 %TEST 12 su sei punti VARIAZIONE capienza_camion minima (3)
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3),
 
     %per ENS
-    nodi espansi: 40824; iterazioni: 32185; profondita' soluzione: 33; costo: 113.16000000000003
-    b=1.3795095578136694
+    nodi espansi: 40824; iterazioni: 32185; profondita' soluzione: 33; costo: 113,16000000000003
+    b=1,3795095578136694
     Calcolato il piano [va_da_a(point(2,2),point(2,9)),va_da_a(point(2,9),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,3)),va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),deposita]
-    con costo 113.16000000000003
+    con costo 113,16000000000003
+
 
 
 
 %============================
 %TEST 13 su sette punti VARIAZIONE capienza_camion minima (3)
 %============================
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15), point(8,5)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15), point(8,5)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),35,3),
 
 
     %per ENS
-    nodi espansi: 130646; iterazioni: 92513; profondita' soluzione: 37; costo: 126.68000000000004
-    b=1.3749055594339255
+    nodi espansi: 130646; iterazioni: 92513; profondita' soluzione: 37; costo: 126,68000000000004
+    b=1,3749055594339255
     Calcolato il piano [va_da_a(point(2,2),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,13)),raccoglie,va_da_a(point(3,13),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(9,9)),raccoglie,va_da_a(point(9,9),point(3,2)),scarica,va_da_a(point(3,2),point(3,3)),va_da_a(point(3,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(3,3)),rifornimento,va_da_a(point(3,3),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),va_da_a(point(7,4),point(8,5)),raccoglie,va_da_a(point(8,5),point(3,2)),scarica,va_da_a(point(3,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(3,2)),scarica,va_da_a(point(3,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(3,2)),deposita]
-    con costo 126.68000000000004
+    con costo 126,68000000000004
 
 
 %============================
@@ -287,7 +313,7 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), poin
 %============================
 
 raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15), point(8,5),
-point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), point(2,16), point(3,17), point(4,18), point(7, 17), point(6,8), point(6,9), point(6,11)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),50,3).
+point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), point(2,16), point(3,17), point(4,18), point(7, 17), point(6,8), point(6,9), point(6,11)], [point(2,7), point(10,8)],[3,3],point(3,3),point(3,2),50,3),
 
 
     %per ENS
@@ -298,50 +324,56 @@ point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), po
 %TEST 15 su due punti con benzinaio e discarica lontanti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3) ], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15),
 
   % per ES_lenta
-    nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31.699999999999996
-    b=1.6177596522879034
+    nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31,699999999999996
+    b=1,6177596522879034
     Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-    con costo 31.699999999999996
+    con costo 31,699999999999996
+    time = 0,125 seconds
 
   % per ES_veloce
-    nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31.699999999999996
-    b=1.6177596522879034
+    nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31,699999999999996
+    b=1,6177596522879034
     Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-    con costo 31.699999999999996
+    con costo 31,699999999999996
+    time = 0,093 seconds
 
   %per ENS
-    nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31.699999999999996
-    b=1.6177596522879034
+    nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31,699999999999996
+    b=1,6177596522879034
     Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-    con costo 31.699999999999996
+    con costo 31,699999999999996
+    time = 0,093 seconds
 
 
 %============================
 %TEST 16 su tre punti con benzinaio e discarica lontanti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9) ], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9) ], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15),
 
   % per ES_lenta
-  nodi espansi: 191; iterazioni: 105; profondita' soluzione: 9; costo: 36.26
-  b=1.7924545480784575
+  nodi espansi: 191; iterazioni: 105; profondita' soluzione: 9; costo: 36,26
+  b=1,7924545480784575
   Calcolato il piano [va_da_a(point(2,2),point(2,9)),raccoglie,va_da_a(point(2,9),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),deposita]
-  con costo 36.26
+  con costo 36,26
+  time = 0,206 seconds
 
   % per ES_veloce
-  nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31.699999999999996
-  b=1.6177596522879034
+  nodi espansi: 29; iterazioni: 19; profondita' soluzione: 7; costo: 31,699999999999996
+  b=1,6177596522879034
   Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-  con costo 31.699999999999996
+  con costo 36,260000001
+  time =  0,156 seconds
 
   %per ENS
-  nodi espansi: 32; iterazioni: 23; profondita' soluzione: 9; costo: 40.46
-  b=1.4697344922755988
+  nodi espansi: 32; iterazioni: 23; profondita' soluzione: 9; costo: 40,46
+  b=1,4697344922755988
   Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-  con costo 40.46
+  con costo 40,46
+  time = 0,125
 
 
 
@@ -349,115 +381,127 @@ raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9) ], [point(2,7), p
 %TEST 17 su quattro punti con benzinaio e discarica lontanti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15),
 
   % per ES_lenta
-  nodi espansi: 5446; iterazioni: 2485; profondita' soluzione: 11; costo: 41.8
-  b=2.185966094595294
+  nodi espansi: 5446; iterazioni: 2485; profondita' soluzione: 11; costo: 41,8
+  b=2,185966094595294
   Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-  con costo 41.8
+  con costo 41,8
+  time =  1,038
 
   % per ES_veloce
-  nodi espansi: 117; iterazioni: 71; profondita' soluzione: 11; costo: 41.8
-  b=1.5417604350217025
+  nodi espansi: 117; iterazioni: 71; profondita' soluzione: 11; costo: 41,8
+  b=1,5417604350217025
   Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-  con costo 41.8
+  con costo 41,8
+  time =  0,187
 
   %per ENS
-  nodi espansi: 32; iterazioni: 23; profondita' soluzione: 11; costo: 41.8
-  b=1.3703509847201236
+  nodi espansi: 32; iterazioni: 23; profondita' soluzione: 11; costo: 41,8
+  b=1,3703509847201236
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),deposita]
-  con costo 41.8
+  con costo 41,8
+  time = 0,141
 
 %============================
 %TEST 18 su cinque punti con benzinaio e discarica lontanti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15),
 
   % per ES_lenta
-  nodi espansi: 89111; iterazioni: 45603; profondita' soluzione: 17; costo: 58.78
-  b=1.955115552447134
+  nodi espansi: 89111; iterazioni: 45603; profondita' soluzione: 17; costo: 58,78
+  b=1,955115552447134
   Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),scarica,va_da_a(point(9,19),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,9)),raccoglie,va_da_a(point(2,9),point(2,19)),rifornimento,va_da_a(point(2,19),point(9,19)),deposita]
-  con costo 58.78
+  con costo 58,78
+  time =  33,018 seconds
 
   % per ES_veloce
-  nodi espansi: 1417; iterazioni: 839; profondita' soluzione: 17; costo: 58.78
-  b=1.5324090109294006
+  nodi espansi: 1417; iterazioni: 839; profondita' soluzione: 17; costo: 58,78
+  b=1,5324090109294006
   Calcolato il piano [va_da_a(point(2,2),point(8,3)),raccoglie,va_da_a(point(8,3),point(7,4)),raccoglie,va_da_a(point(7,4),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),scarica,va_da_a(point(9,19),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,9)),raccoglie,va_da_a(point(2,9),point(2,19)),rifornimento,va_da_a(point(2,19),point(9,19)),deposita]
-  con costo 58.7
+  con costo 58,78
+  time = 0,533 seconds
 
   %per ENS
-  nodi espansi: 53; iterazioni: 41; profondita' soluzione: 17; costo: 66.4
-  b=1.2630716643774678
+  nodi espansi: 53; iterazioni: 41; profondita' soluzione: 17; costo: 66,4
+  b=1,2630716643774678
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),scarica,va_da_a(point(9,19),point(2,19)),rifornimento,va_da_a(point(2,19),point(3,13)),raccoglie,va_da_a(point(3,13),point(9,19)),deposita]
-  con costo 66.4
+  con costo 66,4
+  time = 0,218 seconds
 
 %============================
 %TEST 19 su sei punti con benzinaio e discarica lontanti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15),
 
   % per ES_lenta
   ERROR: Out of global stack
 
   % per ES_veloce
-  nodi espansi: 1345; iterazioni: 701; profondita' soluzione: 19; costo: 60.7
-  b=1.461065190461843
+  nodi espansi: 1345; iterazioni: 701; profondita' soluzione: 19; costo: 60,7
+  b=1,461065190461843
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),scarica,va_da_a(point(9,19),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,9)),raccoglie,va_da_a(point(2,9),point(2,19)),rifornimento,va_da_a(point(2,19),point(9,19)),deposita]
-  con costo 60.7
+  con costo 60,7
+  time =  0,854 seconds
 
   %per ENS
-  nodi espansi: 60; iterazioni: 47; profondita' soluzione: 19; costo: 66.9
-  b=1.2404718346613137
+  nodi espansi: 60; iterazioni: 47; profondita' soluzione: 19; costo: 66,9
+  b=1,2404718346613137
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(9,9)),raccoglie,va_da_a(point(9,9),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),scarica,va_da_a(point(9,19),point(2,19)),rifornimento,va_da_a(point(2,19),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,13)),raccoglie,va_da_a(point(3,13),point(9,19)),deposita]
-  con costo 66.9
+  con costo 66,9
+  time = 0,265
 
 %============================
 %TEST 20 su sette punti con benzinaio e discarica lontanti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15),  point(8,5)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15),  point(8,5)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15),
 
   % per ES_veloce
-  nodi espansi: 172417; iterazioni: 78031; profondita' soluzione: 21; costo: 72.56
-  b=1.775664680934427
+  nodi espansi: 172417; iterazioni: 78031; profondita' soluzione: 21; costo: 72,56
+  b=1,775664680934427
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(8,5)),raccoglie,va_da_a(point(8,5),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),scarica,va_da_a(point(9,19),point(2,19)),rifornimento,va_da_a(point(2,19),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,13)),raccoglie,va_da_a(point(3,13),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),deposita]
-  con costo 72.56
+  con costo 72,56
+  time = 139,962
 
   %per ENS
-  nodi espansi: 30; iterazioni: 29; profondita' soluzione: 21; costo: 78.5
-  b=1.1758153008944612
+  nodi espansi: 30; iterazioni: 29; profondita' soluzione: 21; costo: 78,5
+  b=1,1758153008944612
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(8,5)),raccoglie,va_da_a(point(8,5),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),scarica,va_da_a(point(9,19),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,19)),rifornimento,va_da_a(point(2,19),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),deposita]
-  con costo 78.5
+  con costo 78,5
+  time = 0,328 seconds
 
 %============================
 %TEST 21 su otto punti con benzinaio e discarica lontanti
 %============================
 
-raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15),  point(8,5), point(3,10)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15).
+raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15),  point(8,5), point(3,10)], [point(2,7), point(10,8)],[4,7],point(2,19),point(9,19),50,15),
 
 
   % per ES_veloce
   ERROR: Out of global stack
 
   % per ENS
-  nodi espansi: 30; iterazioni: 29; profondita' soluzione: 25; costo: 95.5
-  b=1.1457367676485573
+  nodi espansi: 30; iterazioni: 29; profondita' soluzione: 25; costo: 95,5
+  b=1,1457367676485573
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(8,5)),raccoglie,va_da_a(point(8,5),point(3,10)),raccoglie,va_da_a(point(3,10),point(9,19)),scarica,va_da_a(point(9,19),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,13)),raccoglie,va_da_a(point(3,13),point(2,19)),rifornimento,va_da_a(point(2,19),point(2,9)),raccoglie,va_da_a(point(2,9),point(9,19)),scarica,va_da_a(point(9,19),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),deposita]
-  con costo 95.5
+  con costo 95,5
+  time = 0,439
 
 %============================
 %TEST 22 su venti punti con benzinaio e discarica lontanti
 %============================
 
 raccolta(cw(1), point(2,2),[point(2,9), point(8,3), point(9,9), point(7,4), point(3,13), point(2,15), point(8,5),
-point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), point(2,16), point(3,17), point(4,18), point(7, 17), point(6,8), point(6,9), point(6,11)], [point(2,7), point(10,8)],[3,3],point(2,19),point(9,19),50,15).
+point(3,10), point(4,10), point(4,12), point(6,15), point(2,19), point(2,17), point(2,16), point(3,17), point(4,18), point(7, 17), point(6,8), point(6,9), point(6,11)], [point(2,7), point(10,8)],[3,3],point(2,19),point(9,19),50,15),
 
 
   % per ESN
-  nodi espansi: 610; iterazioni: 741; profondita' soluzione: 54; costo: 134.76000000000005
-  b=1.126108358784414
+  nodi espansi: 610; iterazioni: 741; profondita' soluzione: 54; costo: 134,76000000000005
+  b=1,126108358784414
   Calcolato il piano [va_da_a(point(2,2),point(7,4)),raccoglie,va_da_a(point(7,4),point(8,3)),raccoglie,va_da_a(point(8,3),point(8,5)),raccoglie,va_da_a(point(8,5),point(6,8)),raccoglie,va_da_a(point(6,8),point(6,9)),raccoglie,va_da_a(point(6,9),point(2,19)),raccoglie,va_da_a(point(2,19),point(9,19)),scarica,va_da_a(point(9,19),point(7,17)),raccoglie,va_da_a(point(7,17),point(6,15)),raccoglie,va_da_a(point(6,15),point(3,17)),raccoglie,va_da_a(point(3,17),point(2,17)),raccoglie,va_da_a(point(2,17),point(2,16)),raccoglie,va_da_a(point(2,16),point(2,19)),rifornimento,va_da_a(point(2,19),point(9,19)),scarica,va_da_a(point(9,19),point(4,18)),raccoglie,va_da_a(point(4,18),point(2,15)),raccoglie,va_da_a(point(2,15),point(3,13)),raccoglie,va_da_a(point(3,13),point(4,12)),raccoglie,va_da_a(point(4,12),point(3,10)),va_da_a(point(3,10),point(2,9)),raccoglie,va_da_a(point(2,9),point(2,19)),rifornimento,va_da_a(point(2,19),point(9,19)),scarica,va_da_a(point(9,19),point(6,11)),raccoglie,va_da_a(point(6,11),point(4,10)),raccoglie,va_da_a(point(4,10),point(3,10)),raccoglie,va_da_a(point(3,10),point(9,9)),raccoglie,va_da_a(point(9,9),point(9,19)),deposita]
-  con costo 134.76000000000005
+  con costo 134,76000000000005
+  time = 1,893

@@ -2,6 +2,7 @@
 :- use_module(two_level_planner).
 :- use_module(spazzino_mondi).
 :- use_module(geometria).
+:- use_module(library(statistics)).
 import_type(geometria, [direzione/0,
 			point/0]).
 
@@ -9,11 +10,10 @@ import_type(geometria, [direzione/0,
 
 raccoglitore_gerarchico_help :- maplist(write, [
 '\n***********************************************************',
-'\nRaccoglitore gerarchico,  provare:\n',
-'\n?- load_world(cw(1)).',
+'\nRaccoglitore gerarchico\n',
+'\nEuristica di default: ENS\n',
 '\n  raccolta(mondo, punto di partenza, lista di cassonetti, lista_aree, lista_upperbound, benzinaio, deposito, capienza serbatoio, capienza camion)',
 '\n?- raccolta(cw(1), point(2,2),[point(2,9), point(8,3)], [point(1,7), point(9,4)], [3,8], point(3,3),point(3,2),35,15).',
-'\n?- action_plan(Stato, Azione, Piano, Costo).',
 '\n***********************************************************\n']).
 :- raccoglitore_gerarchico_help.
 
@@ -100,8 +100,8 @@ inizializza_cassonetto(P, Lista_aree, Lista_upperbound) :-
 %	generazione valore
 	info_area(Area, Ub),
 	random_between(1, Ub, R),
-	assert(cassonetto(P,Area,3)).
-%	Cambia il 3 con R finito il testing
+	assert(cassonetto(P,Area,R)).
+
 
 %==================================================
 %  Implemento i predicati aperti di two_level_planner
@@ -130,7 +130,7 @@ two_level_planner:add_del(0, scarica, St, [carico(0)], [carico(C)], 0.5) :-
 % vai al cassonetto
 two_level_planner:add_del(0,va_da_a(P1,P2), St, [in(P2), serbatoio(Y)], [in(P1), serbatoio(X)], Cost) :-
 % azione che permette di raggiungere un cassonetto del mondo decrementando
-% il qunatitativo di benzona disponibile
+% il qunatitativo di benzina disponibile
 
 % controllo che sia possibile svuotare interamente il cassonetto, controllando
 % che la capienza del camion - l'upperbound dell'area del cassonetto sia <= al
@@ -332,7 +332,7 @@ two_level_planner:h(0, St, 0) :-
 %	setof(X, member(deve_prendere(X), St), Pos) ->
 %		in(P),
 %		deposito(D),
-%		longest(P,Pos,L),
+% 		longest(P,Pos,L),
 %		distance(diagonal,P,L, Andata),
 %		distance(diagonal,L,D, Ritorno),
 %		H is Ritorno +  Andata
@@ -342,17 +342,17 @@ two_level_planner:h(0, St, 0) :-
 
 %******************************************************************************
 % EURISTICA ES_veloce sottostimata ma con branching factor accettabile
-two_level_planner:h(0, St, H) :-
+%two_level_planner:h(0, St, H) :-
 % L'euristica viene calcolata trovando il cammino minimo per raggiungere tutti i cassonetti
 % e il benzinaio partendo dal punto di partenza e terminando nel deposito
-	setof(X, member(deve_prendere(X), St), Pos) ->
-		in(P),
-		deposito(D),
-		p_merge_sort(P,Pos, Ord),
-		add(Ord, D, Punti),
-		distanza_es(Punti ,P, H)
-		;
-		H = 0.
+%	setof(X, member(deve_prendere(X), St), Pos) ->
+%		in(P),
+%	deposito(D),
+%		p_merge_sort(P,Pos, Ord),
+%		add(Ord, D, Punti),
+%		distanza_es(Punti ,P, H)
+%		;
+%		H = 0.
 
 
 %******************************************************************************
@@ -360,15 +360,15 @@ two_level_planner:h(0, St, H) :-
 % EURISTICA ENS non sottostimata con branching factor molto basso
 % L'euristica somma la distanza tra ogni cassonetto che deve raccogliere +
 % punto di partenza e il deposito
-%two_level_planner:h(0, St, H) :-
-%		setof(X, member(deve_prendere(X), St), Pos) ->
-%		deposito(D),
-%		in(P),
-%		add(Pos,P, Res),
-%		distanza_ens(Res,D, V),
-%		H is  V * 2
-%		;
-%		H = 0.
+two_level_planner:h(0, St, H) :-
+		setof(X, member(deve_prendere(X), St), Pos) ->
+		deposito(D),
+		in(P),
+		add(Pos,P, Res),
+		distanza_ens(Res,D, V),
+		H is  V * 2
+		;
+		H = 0.
 
 
 %=====================================
@@ -513,10 +513,13 @@ raccolta(W, Pos, Racc, Lista_aree, Lista_upperbound, B, Q, C, A) :-
 	set_strategy(astar),
 	set_strategy(ps(closed)),
 	step(['Avvio con strategia astar e potatura chiusi']),!,
+	time(get_plan([Pos,Racc,Q,B], Plan, Cost)),
 
 %  calcolo il piano  di 2 livelli
 	get_plan([Pos,Racc,Q,B], Plan, Cost),
 	step(['Calcolato il piano ',Plan, '\ncon costo ', Cost]),!,
+
+
 
 %  eseguo il piano di 2 livelli
 	esegui(Plan).
